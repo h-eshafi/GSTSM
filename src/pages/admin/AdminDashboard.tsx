@@ -52,17 +52,24 @@ export default function AdminDashboard() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer la page ${id} ?`)) {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer la page "${id}" ?`)) {
+      // 1. Instantly remove from local UI state
+      setPosts(prev => prev.filter(p => p.id !== id));
       removePostFromCache(id);
-      setPosts(posts.filter(p => p.id !== id));
-      await supabase.from('posts').delete().eq('id', id);
+
+      // 2. Delete from Supabase
+      const { error } = await supabase.from('posts').delete().eq('id', id);
+      if (error) {
+        console.error('Delete error:', error);
+        alert(`Erreur de suppression dans Supabase: ${error.message}`);
+      }
     }
   };
 
-  // Pre-calculate counts
-  const pageCount = posts.filter(p => p.type === 'page').length;
-  const newsCount = posts.filter(p => p.type === 'actualite').length;
-  const eventCount = posts.filter(p => p.type === 'evenement').length;
+  // Pre-calculate counts dynamically
+  const pageCount = posts.filter(p => p.type === 'page' || !p.type || p.type === '').length;
+  const newsCount = posts.filter(p => p.type === 'actualite' || p.type === 'article' || p.type === 'news' || p.type === 'post').length;
+  const eventCount = posts.filter(p => p.type === 'evenement' || p.type === 'event').length;
 
   // Known slugs map for categories
   const getKnownCategory = (slug: string): string => {
@@ -253,10 +260,10 @@ export default function AdminDashboard() {
             {/* KPI Cards Row */}
             <div className="admin-kpi-grid">
               <div className="admin-kpi-card">
-                <div className="admin-kpi-icon-pill">👁️</div>
+                <div className="admin-kpi-icon-pill">📂</div>
                 <div className="admin-kpi-info">
-                  <h4>Visiteurs ce mois-ci</h4>
-                  <p>12 450</p>
+                  <h4>Total Contenus</h4>
+                  <p>{posts.length}</p>
                 </div>
               </div>
 
