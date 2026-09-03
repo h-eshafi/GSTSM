@@ -161,15 +161,24 @@ export default function AdminDashboard() {
               En ligne ✓
             </span>
           </td>
-          <td style={{ textAlign: 'right' }}>
+          <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <a 
+              href={`/pages/${post.id}`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="admin-btn admin-btn-secondary" 
+              style={{ marginRight: '6px', textDecoration: 'none' }}
+              title="Voir la page publique"
+            >
+              👁️ Voir
+            </a>
             <Link to={`/admin/edit/${post.id}`}>
-              <button className="admin-btn admin-btn-secondary">
+              <button className="admin-btn admin-btn-secondary" style={{ marginRight: '6px' }}>
                 ✏️ Éditer
               </button>
             </Link>
             <button 
               className="admin-btn admin-btn-danger" 
-              style={{ marginLeft: '8px' }}
               onClick={() => handleDelete(post.id)}
             >
               🗑️ Supprimer

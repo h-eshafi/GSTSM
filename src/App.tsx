@@ -7,6 +7,7 @@ import ActualitesPage from './pages/ActualitesPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminEditor from './pages/admin/AdminEditor';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminMenus from './pages/admin/AdminMenus';
 import AdminSidebar from './components/admin/AdminSidebar';
 
 function PublicLayout() {
@@ -45,6 +46,7 @@ export default function App() {
         
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
+          <Route path="menus" element={<AdminMenus />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="new" element={<AdminEditor />} />
           <Route path="edit/:id" element={<AdminEditor />} />

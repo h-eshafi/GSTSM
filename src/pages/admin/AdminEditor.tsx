@@ -137,18 +137,65 @@ export default function AdminEditor() {
                 name="kicker" 
                 value={formData.kicker || ''} 
                 onChange={handleChange} 
-                placeholder="ex: Le GST Souss-Massa"
+                placeholder="ex: LE GST SOUSS-MASSA"
               />
             </div>
             <div className="editor-meta-group">
-              <label>Image de couverture (URL)</label>
-              <input 
-                type="text" 
-                name="image" 
-                value={formData.image || ''} 
-                onChange={handleChange} 
-                placeholder="ex: /gst-scene-2.png"
-              />
+              <label>Emplacement Menu Navbar</label>
+              <select 
+                name="menuPlacement"
+                value={formData.kicker || ''} 
+                onChange={(e) => setFormData({ ...formData, kicker: e.target.value })}
+              >
+                <option value="">-- Ne pas inclure dans le menu --</option>
+                <option value="LE GST SOUSS-MASSA">1. Le GST Souss-Massa</option>
+                <option value="PATIENTS ET PROCHES">2. Patients et Proches</option>
+                <option value="OFFRE DE SOINS">3. Offre de Soins</option>
+                <option value="SANTÉ PUBLIQUE">4. Santé Publique</option>
+                <option value="ESPACE PROFESSIONNEL">5. Espace Professionnel</option>
+                <option value="ACTUALITÉS ET MÉDIAS">6. Actualités et Médias</option>
+              </select>
+            </div>
+            
+            <div className="editor-meta-group" style={{ gridColumn: 'span 2' }}>
+              <label>Image de couverture (URL ou Fichier local)</label>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <input 
+                    type="text" 
+                    name="image" 
+                    value={formData.image || ''} 
+                    onChange={handleChange} 
+                    placeholder="ex: /gst-scene-2.png ou https://..."
+                  />
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setFormData(prev => ({ ...prev, image: reader.result as string }));
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ fontSize: '12px' }}
+                  />
+                </div>
+
+                {formData.image && (
+                  <div style={{ width: '90px', height: '65px', borderRadius: '8px', border: '1px solid #E2E8F0', overflow: 'hidden', flexShrink: 0, backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img 
+                      src={formData.image} 
+                      alt="Aperçu" 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

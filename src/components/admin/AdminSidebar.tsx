@@ -77,6 +77,16 @@ export default function AdminSidebar() {
         <div className="admin-nav-divider"></div>
 
         <Link 
+          to="/admin/menus" 
+          className={`admin-nav-item ${isActive('/admin/menus') ? 'active' : ''}`}
+        >
+          <div className="admin-nav-item-left">
+            <span>🗺️</span>
+            <span>Gestion des Menus</span>
+          </div>
+        </Link>
+
+        <Link 
           to="/admin/settings" 
           className={`admin-nav-item ${isActive('/admin/settings') ? 'active' : ''}`}
         >
