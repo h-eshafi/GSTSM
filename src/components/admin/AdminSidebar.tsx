@@ -28,50 +28,40 @@ export default function AdminSidebar() {
           to="/admin" 
           className={`admin-nav-item ${isActive('/admin', 'overview') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>🏠</span>
-            <span>Dashboard</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Dashboard</span>
+          <span style={{ fontSize: '15px' }}>🏠</span>
         </Link>
 
         <Link 
           to="/admin?tab=general" 
           className={`admin-nav-item ${isActive('/admin', 'general') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>📄</span>
-            <span>Pages Générales</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Pages Générales</span>
+          <span style={{ fontSize: '15px' }}>📄</span>
         </Link>
 
         <Link 
           to="/admin?tab=pages" 
           className={`admin-nav-item ${isActive('/admin', 'pages') || isActive('/admin/edit') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>📚</span>
-            <span>Pages par Rubrique</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Pages par Rubrique</span>
+          <span style={{ fontSize: '15px' }}>📚</span>
         </Link>
 
         <Link 
           to="/admin?tab=actualites" 
           className={`admin-nav-item ${isActive('/admin', 'actualites') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>📰</span>
-            <span>Actualités & Médias</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Actualités & Médias</span>
+          <span style={{ fontSize: '15px' }}>📰</span>
         </Link>
 
         <Link 
           to="/admin?tab=evenements" 
           className={`admin-nav-item ${isActive('/admin', 'evenements') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>📅</span>
-            <span>Événements & Agenda</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Événements & Agenda</span>
+          <span style={{ fontSize: '15px' }}>📅</span>
         </Link>
 
         <div className="admin-nav-divider"></div>
@@ -80,20 +70,16 @@ export default function AdminSidebar() {
           to="/admin/menus" 
           className={`admin-nav-item ${isActive('/admin/menus') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>🗺️</span>
-            <span>Gestion des Menus</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Gestion des Menus</span>
+          <span style={{ fontSize: '15px' }}>🗺️</span>
         </Link>
 
         <Link 
           to="/admin/settings" 
           className={`admin-nav-item ${isActive('/admin/settings') ? 'active' : ''}`}
         >
-          <div className="admin-nav-item-left">
-            <span>⚙️</span>
-            <span>Paramètres & Profil</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Paramètres & Profil</span>
+          <span style={{ fontSize: '15px' }}>⚙️</span>
         </Link>
 
         <Link 
@@ -101,10 +87,8 @@ export default function AdminSidebar() {
           className="admin-nav-item" 
           style={{ marginTop: 'auto' }}
         >
-          <div className="admin-nav-item-left">
-            <span>🌐</span>
-            <span>Voir le Site Public</span>
-          </div>
+          <span style={{ fontWeight: '600', fontSize: '13.5px' }}>Voir le Site Public</span>
+          <span style={{ fontSize: '15px' }}>🌐</span>
         </Link>
       </nav>
     </aside>

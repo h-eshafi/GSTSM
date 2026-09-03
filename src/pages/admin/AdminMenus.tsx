@@ -86,14 +86,7 @@ export default function AdminMenus() {
         </div>
 
         <div className="admin-topbar-actions">
-          <button 
-            type="button" 
-            className="storeep-dropdown-btn" 
-            onClick={handleSaveAll}
-            style={{ padding: '8px 18px', fontSize: '13px' }}
-          >
-            💾 Enregistrer la Structure
-          </button>
+          <button className="admin-icon-btn" title="Notifications">🔔</button>
           <div className="admin-avatar-btn" title="Profil Administrateur">AD</div>
         </div>
       </header>
@@ -111,7 +104,7 @@ export default function AdminMenus() {
               className="storeep-dropdown-btn" 
               onClick={handleSaveAll}
             >
-              💾 Enregistrer les Modifications
+              Enregistrer
             </button>
           </div>
         </div>
@@ -138,8 +131,8 @@ export default function AdminMenus() {
                     setSelectedColumnIndex(0);
                   }}
                 >
+                  <span style={{ fontSize: '13px', fontWeight: '600' }}>{label}</span>
                   <span>📌</span>
-                  <span style={{ fontSize: '13px' }}>{label}</span>
                 </button>
               ))}
             </div>
@@ -184,31 +177,34 @@ export default function AdminMenus() {
                   {/* Active Submenu Container */}
                   {currentColumns[selectedColumnIndex] && (
                     <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                      <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0F172A', marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span>📂</span>
                         <span>{currentColumns[selectedColumnIndex].title}</span>
                       </h3>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {currentColumns[selectedColumnIndex].links.length === 0 ? (
-                          <div style={{ padding: '24px', textAlign: 'center', color: '#94A3B8', fontSize: '13px', background: '#F8FAFC', borderRadius: '8px', border: '1px dashed #CBD5E1' }}>
+                          <div style={{ padding: '24px', textAlign: 'center', color: '#94A3B8', fontSize: '12px', background: '#F8FAFC', borderRadius: '8px', border: '1px dashed #CBD5E1' }}>
                             Aucun lien dans ce sous-menu. Utilisez le sélecteur de pages à droite pour en ajouter.
                           </div>
                         ) : (
                           currentColumns[selectedColumnIndex].links.map((link: any, linkIdx: number) => (
-                            <div key={linkIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0', transition: 'all 0.15s' }}>
-                              <div>
-                                <div style={{ fontWeight: '600', color: '#0F172A', fontSize: '14px' }}>{link.label}</div>
-                                <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>{link.href}</div>
+                            <div 
+                              key={linkIdx} 
+                              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' }}
+                            >
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: '8px' }}>
+                                <div style={{ fontWeight: '600', color: '#0F172A', fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{link.label}</div>
+                                <div style={{ fontSize: '11px', color: '#64748B' }}>{link.href}</div>
                               </div>
                               <button 
                                 type="button"
                                 className="admin-btn admin-btn-danger" 
-                                style={{ padding: '6px 10px', fontSize: '12px' }}
+                                style={{ padding: '4px 8px', fontSize: '11px', flexShrink: 0 }}
                                 onClick={() => handleRemoveLink(selectedColumnIndex, linkIdx)}
-                                title="Supprimer du menu"
+                                title="Supprimer"
                               >
-                                🗑️ Retirer
+                                🗑️
                               </button>
                             </div>
                           ))
@@ -240,7 +236,7 @@ export default function AdminMenus() {
                     />
                   </div>
 
-                  {/* Results List (Showing 5 Max) */}
+                  {/* Results List (Showing 5 Max - Same Rectangle Size & Style) */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {filteredPages.length === 0 ? (
                       <div style={{ fontSize: '12px', color: '#94A3B8', textAlign: 'center', padding: '16px' }}>
