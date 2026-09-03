@@ -1,0 +1,132 @@
+[
+  {
+    "id": "formation-continue",
+    "type": "actualite",
+    "kicker": "Professionnels · Ressources Humaines",
+    "title": "Formation continue des équipes de santé",
+    "excerpt": "Programme régional de mise à niveau des compétences pour les médecins, infirmiers et personnels administratifs du GST Souss-Massa.",
+    "image": "gst-scene-2.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        Le renforcement du capital humain constitue l'un des piliers essentiels de la gouvernance régionale de la santé.\n                    </p>\n                    <p>\n                        À travers ce programme, des sessions de formation théoriques et pratiques sont dispensées en partenariat avec la Faculté de Médecine et de Pharmacie d'Agadir et le CHU Mohammed VI.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.528Z"
+  },
+  {
+    "id": "offre-coordonnee",
+    "type": "actualite",
+    "kicker": "Institutionnel · Transformation régionale",
+    "title": "Une offre de soins coordonnée au service du territoire",
+    "excerpt": "Mise en place de réseaux de soins intégrés reliant la médecine de proximité aux hôpitaux régionaux et au CHU Mohammed VI.",
+    "image": "gst-hero.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        La création du GST Souss-Massa permet d'abattre le cloisonnement entre les différents niveaux d'établissements.\n                    </p>\n                    <p>\n                        Grâce au système d'information médical partagé et aux protocoles de transfert prioritaire, le patient bénéficie d'une prise en charge rapide, continue et adaptée à la gravité de son état.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.539Z"
+  },
+  {
+    "id": "ouverture-hospitaliere",
+    "type": "actualite",
+    "kicker": "Communiqué · Actualité régionale",
+    "title": "Ouverture et développement de l’offre hospitalière régionale",
+    "excerpt": "Dans le cadre de la refonte du système de santé national, le GST Souss-Massa annonce l'ouverture de nouvelles unités hospitalières spécialisées et le renforcement des équipements biomédicaux.",
+    "image": "hospital.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        Agadir, Région Souss-Massa — Le Groupement Sanitaire Territorial poursuit la modernisation et l'extension de son offre de soins hospitalière pour répondre aux besoins croissants des citoyens de la région.\n                    </p>\n                    <p>\n                        Ces nouveaux développements comprennent la mise en service de nouveaux blocs opératoires, la modernisation du plateau technique de radiologie et d'imagerie médicale, ainsi que le renforcement de la capacité d'accueil des services de réanimation et de soins intensifs.\n                    </p>\n                    <div class=\"content-sections\" style=\"margin-top:30px;\">\n                        <article>\n                            <i>01</i>\n                            <div>\n                                <h2>Renforcement des capacités d'accueil</h2>\n                                <p>Augmentation du nombre de lits d'hospitalisation de jour et de chirurgie ambulatoire dans les hôpitaux provinciaux d'Inezgane, Taroudant et Tiznit.</p>\n                            </div>\n                        </article>\n                        <article>\n                            <i>02</i>\n                            <div>\n                                <h2>Équipements de haute technologie</h2>\n                                <p>Acquisition de nouveaux scanners IRM et d'équipements de radiologie numérique de dernière génération installés au CHU Mohammed VI d'Agadir.</p>\n                            </div>\n                        </article>\n                    </div>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.540Z"
+  },
+  {
+    "id": "rencontres-sante",
+    "type": "actualite",
+    "kicker": "Événement · Actualité régionale",
+    "title": "Rencontres régionales de la santé Souss-Massa",
+    "excerpt": "Un espace de concertation entre décideurs, professionnels de santé et acteurs territoriaux pour bâtir l’avenir de l'offre de soins dans la région.",
+    "image": "event.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        Les Rencontres régionales de la santé ont réuni l'ensemble des partenaires institutionnels pour faire le bilan et tracer les perspectives du GST Souss-Massa.\n                    </p>\n                    <p>\n                        Ces assises de la santé permettent de coordonner les actions régionales, de valoriser les initiatives provinciales et de renforcer la synergie entre médecine de ville, structures de proximité et hôpitaux.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.546Z"
+  },
+  {
+    "id": "renforcement-accueil",
+    "type": "actualite",
+    "kicker": "Proximité · Parcours de soins",
+    "title": "Renforcement de l’accueil dans les structures de proximité",
+    "excerpt": "Amélioration des conditions de réception, de la signalétique et de l'orientation des usagers dans les centres de santé de la région.",
+    "image": "gst-scene-3.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        L'humanisation des structures de santé commence dès le premier contact à l'accueil.\n                    </p>\n                    <p>\n                        Le GST Souss-Massa a déployé de nouveaux espaces d'accueil informatisés et formé des agents d'orientation dédiés dans plus de 50 centres de santé urbains et ruraux.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.555Z"
+  },
+  {
+    "id": "vaccination-prevention",
+    "type": "actualite",
+    "kicker": "Santé publique · Actualité régionale",
+    "title": "Campagne régionale de vaccination et de prévention",
+    "excerpt": "Une vaste initiative de santé publique visant à renforcer l'immunisation de la population et à promouvoir le dépistage précoce des maladies chroniques.",
+    "image": "prevention.png",
+    "content": "<article class=\"content-card\">\n                    <p style=\"font-size:18px; font-weight:700; color:var(--navy); margin-bottom:20px;\">\n                        Le GST Souss-Massa déploie des unités mobiles et renforce les centres de santé primaires dans le cadre de la grande campagne régionale de prévention sanitaire.\n                    </p>\n                    <p>\n                        Cette campagne cible la couverture vaccinale des enfants, la prévention contre la grippe saisonnière et le dépistage précoce du diabète et de l'hypertension artérielle à travers les 6 provinces de la région.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.566Z"
+  },
+  {
+    "id": "forum-prevention",
+    "type": "evenement",
+    "kicker": "Agenda Régional · 05 Novembre 2026",
+    "title": "Forum territorial de la prévention",
+    "excerpt": "Institutionnel · Taroudant — Rencontre des acteurs locaux et territoriaux pour le renforcement des programmes de santé communautaire à Taroudant.",
+    "image": "prevention.png",
+    "content": "<article class=\"content-card\">\n                    <h2 style=\"color:var(--navy); font-size:24px; margin-bottom:15px;\">Détails du Forum</h2>\n                    <p><strong>Date :</strong> 05 Novembre 2026</p>\n                    <p><strong>Lieu :</strong> Centre Culturel, Taroudant</p>\n                    <p><strong>Public :</strong> Élus locaux, responsables associatifs et professionnels de santé</p>\n                    <hr style=\"margin:20px 0; border:0; border-top:1px solid #e2e8ee;\"/>\n                    <p>\n                        Une journée consacrée aux stratégies de prévention de proximité et à la prise en charge précoce dans les zones rurales de la province de Taroudant.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.570Z"
+  },
+  {
+    "id": "journee-sensibilisation",
+    "type": "evenement",
+    "kicker": "Agenda Régional · 08 Octobre 2026",
+    "title": "Journée régionale de sensibilisation",
+    "excerpt": "Grand public · Agadir — Une journée d'échange, d'ateliers interactifs et de dépistages gratuits organisée au cœur de la ville d'Agadir.",
+    "image": "event.png",
+    "content": "<article class=\"content-card\">\n                    <h2 style=\"color:var(--navy); font-size:24px; margin-bottom:15px;\">Détails de l'événement</h2>\n                    <p><strong>Date :</strong> 08 Octobre 2026</p>\n                    <p><strong>Lieu :</strong> Esplanade de la Santé, Agadir</p>\n                    <p><strong>Public :</strong> Grand public, familles et associations de santé</p>\n                    <hr style=\"margin:20px 0; border:0; border-top:1px solid #e2e8ee;\"/>\n                    <p>\n                        Rejoignez-nous pour cette journée exceptionnelle dédiée à la santé, au bien-être et à la prévention des risques de santé courants. Des équipes médicales spécialisées seront présentes pour animer des ateliers et réaliser des examens préventifs.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.587Z"
+  },
+  {
+    "id": "rencontre-professionnels",
+    "type": "evenement",
+    "kicker": "Agenda Régional · 21 Octobre 2026",
+    "title": "Rencontre des professionnels de santé",
+    "excerpt": "Professionnels · Souss-Massa — Forum d'échange entre médecins, infirmiers, chercheurs et administrateurs du GST Souss-Massa.",
+    "image": "gst-scene-2.png",
+    "content": "<article class=\"content-card\">\n                    <h2 style=\"color:var(--navy); font-size:24px; margin-bottom:15px;\">Détails du séminaire</h2>\n                    <p><strong>Date :</strong> 21 Octobre 2026</p>\n                    <p><strong>Lieu :</strong> Palais des Congrès, Agadir</p>\n                    <p><strong>Public :</strong> Professionnels de santé et enseignants-chercheurs</p>\n                    <hr style=\"margin:20px 0; border:0; border-top:1px solid #e2e8ee;\"/>\n                    <p>\n                        Consacré à la coordination des pratiques médicales et au partage d’expériences au sein des établissements hospitaliers de la région Souss-Massa.\n                    </p>\n                </article>",
+    "createdAt": "2026-09-01T13:25:04.604Z"
+  },
+  {
+    "id": "qui-sommes-nous",
+    "type": "page",
+    "kicker": "Le GST Souss-Massa",
+    "title": "Qui sommes-nous ?",
+    "excerpt": "Une organisation publique régionale qui réunit les établissements de santé de son territoire pour construire une offre de soins plus accessible, coordonnée et adaptée aux besoins de la population.",
+    "image": "gst-scene-2.png",
+    "content": "<div class=\"rich-content\">\n                <section style=\"margin-bottom:60px;\">\n                    <span class=\"section-kicker\">Une gouvernance sanitaire régionale</span>\n                    <h2 style=\"font-size:36px; color:var(--navy); margin-bottom:15px;\">Un réseau unique au service de plus de trois millions d’habitants</h2>\n                    <p style=\"font-size:18px; color:var(--muted); max-width:850px; line-height:1.7;\">\n                        Le Groupement Sanitaire Territorial de la Région Souss-Massa est un établissement public doté de la personnalité morale et de l’autonomie financière. Son ambition est de faire de la région une unité cohérente de planification, d’exécution et d’évaluation, dans laquelle chaque établissement devient un maillon d’un parcours intégré de soins.\n                    </p>\n                </section>\n            </div>",
+    "createdAt": "2026-09-01T22:36:39.640Z"
+  },
+  {
+    "id": "mot-du-directeur-general",
+    "type": "page",
+    "kicker": "Direction Générale",
+    "title": "Mot du Directeur Général",
+    "excerpt": "M. Tarik El Harti a été nommé à cette fonction le 9 avril 2026.",
+    "image": "gst-logo.png",
+    "content": "\n        <h2 style=\"color:var(--teal); font-size:20px; font-weight:600; margin-bottom:20px;\">Directeur Général du Groupement Sanitaire Territorial de la Région Souss-Massa</h2>\n        <blockquote style=\"border-left:4px solid var(--green); color:#405d54; background:#f3f9f5; padding:20px 24px; font-size:16px;\">\n            Le mot institutionnel du Directeur Général sera intégré ici après validation de sa version officielle.\n        </blockquote>\n    ",
+    "createdAt": "2026-09-01T22:36:39.647Z"
+  },
+  {
+    "id": "missions-vision-valeurs",
+    "type": "page",
+    "kicker": "Gouvernance et statut du GST Souss-Massa",
+    "title": "Missions, vision et valeurs",
+    "excerpt": "Organiser la santé à l’échelle du territoire.",
+    "image": "gst-scene-3.png",
+    "content": "\n        <p style=\"font-size:16px; color:var(--muted); margin-bottom:30px;\">Le GST ne constitue pas seulement une nouvelle structure administrative. Il rapproche la décision des réalités locales et organise la complémentarité de l’ensemble du réseau de santé.</p>\n        <div class=\"content-sections\">\n            <article>\n                <i>01</i>\n                <div>\n                    <h2>Planifier l’offre régionale</h2>\n                    <p>Adapter les ressources, les investissements et les filières de soins aux besoins réels de la population.</p>\n                </div>\n            </article>\n            <article>\n                <i>02</i>\n                <div>\n                    <h2>Coordonner les parcours</h2>\n                    <p>Relier les soins de proximité, les hôpitaux provinciaux et régionaux et les hôpitaux universitaires.</p>\n                </div>\n            </article>\n            <article>\n                <i>03</i>\n                <div>\n                    <h2>Protéger la population</h2>\n                    <p>Déployer la prévention, les programmes de santé publique, la veille épidémiologique et la gestion des risques sanitaires.</p>\n                </div>\n            </article>\n            <article>\n                <i>04</i>\n                <div>\n                    <h2>Améliorer la qualité</h2>\n                    <p>Piloter la sécurité du patient, la performance, la recherche, l’innovation et la transformation numérique.</p>\n                </div>\n            </article>\n        </div>\n    ",
+    "createdAt": "2026-09-01T22:36:39.647Z"
+  },
+  {
+    "id": "chiffres-cles",
+    "type": "page",
+    "kicker": "Le GST Souss-Massa",
+    "title": "Chiffres clés",
+    "excerpt": "Repères sur le territoire de la Région Souss-Massa.",
+    "image": "hospital.png",
+    "content": "\n        <div class=\"gst-stats\" style=\"margin-top:40px; padding:0;\">\n            <h2 style=\"font-size:20px; margin-bottom:20px; color:var(--teal);\">Repères sur le territoire</h2>\n            <div>\n                <article><b>3 020 431</b><span>Population régionale · HCP 2024</span></article>\n                <article><b>6</b><span>préfectures et provinces</span></article>\n                <article><b>6</b><span>districts sanitaires</span></article>\n                <article><b>3</b><span>niveaux de soins</span></article>\n            </div>\n        </div>\n    ",
+    "createdAt": "2026-09-01T22:36:39.647Z"
+  }
+]

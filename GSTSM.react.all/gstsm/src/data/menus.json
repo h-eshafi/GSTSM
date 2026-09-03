@@ -1,0 +1,237 @@
+{
+  "gst": {
+      "class": "mega groups-4",
+      "columns": [
+          {
+              "title": "Découvrir le GST",
+              "links": [
+                  { "label": "Qui sommes-nous ?", "href": "/pages/qui-sommes-nous" },
+                  { "label": "Mot du Directeur Général", "href": "/pages/mot-du-directeur-general" },
+                  { "label": "Missions, vision et valeurs", "href": "/pages/missions-vision-valeurs" },
+                  { "label": "Chiffres clés", "href": "/pages/chiffres-cles" }
+              ]
+          },
+          {
+              "title": "Gouvernance et organisation",
+              "links": [
+                  { "label": "Conseil d’administration", "href": "/le-gst#governance" },
+                  { "label": "Organigramme général", "href": "/le-gst#org" }
+              ]
+          },
+          {
+              "title": "Stratégie et performance",
+              "links": [
+                  { "label": "Plan d’action", "href": "/le-gst#plan" },
+                  { "label": "Projets structurants", "href": "/le-gst#projects" },
+                  { "label": "Qualité et sécurité du patient", "href": "/le-gst#quality" }
+              ]
+          },
+          {
+              "title": "Recherche, enseignement et innovation",
+              "links": [
+                  { "label": "Recherche et innovation", "href": "/le-gst#research" },
+                  { "label": "Publications scientifiques", "href": "/le-gst#publications" },
+                  { "label": "Appels à projets", "href": "/le-gst#calls" },
+                  { "label": "Contacts institutionnels", "href": "/le-gst#contact" }
+              ]
+          }
+      ],
+      "art": {
+          "img": "/gst-scene-2.png",
+          "tag": "INSTITUTION",
+          "title": "Une gouvernance régionale intégrée",
+          "href": "/le-gst"
+      }
+  },
+  "patients": {
+      "class": "mega groups-4",
+      "columns": [
+          {
+              "title": "SAMU régional",
+              "links": [
+                  { "label": "Urgences et aide médicale urgente", "href": "/urgences" },
+                  { "label": "Quand appeler le SAMU ?", "href": "/urgences#when" }
+              ]
+          },
+          {
+              "title": "Consultations et examens",
+              "links": [
+                  { "label": "Prendre un rendez-vous", "href": "/rendez-vous" },
+                  { "label": "Préparer sa consultation", "href": "/rendez-vous#prepare" }
+              ]
+          },
+          {
+              "title": "Hospitalisation",
+              "links": [
+                  { "label": "Préparer son hospitalisation", "href": "/patients-proches#prepare" },
+                  { "label": "Pendant l’hospitalisation", "href": "/patients-proches#stay" },
+                  { "label": "Sortie et continuité des soins", "href": "/patients-proches#discharge" },
+                  { "label": "Hôpital de jour", "href": "/patients-proches#day-hospital" }
+              ]
+          },
+          {
+              "title": "Droits et qualité des soins",
+              "links": [
+                  { "label": "Droits et obligations du patient", "href": "/patients-proches#rights" },
+                  { "label": "Qualité et sécurité du patient", "href": "/patients-proches#quality" },
+                  { "label": "Satisfaction et expérience patient", "href": "/patients-proches#experience" },
+                  { "label": "Guides et brochures", "href": "/patients-proches#guides" }
+              ]
+          }
+      ],
+      "art": {
+          "img": "/prevention.png",
+          "tag": "VOTRE PARCOURS",
+          "title": "Être informé, accueilli et accompagné",
+          "href": "/patients-proches"
+      }
+  },
+  "offre": {
+      "class": "mega groups-3",
+      "columns": [
+          {
+              "title": "Soins de proximité",
+              "links": [
+                  { "label": "Établissements de soins de santé primaires (ESSP)", "href": "/offre-de-soins#essp" },
+                  { "label": "Établissements médico-sociaux (EMS)", "href": "/offre-de-soins#ems" },
+                  { "label": "Centres de santé urbains et ruraux", "href": "/offre-de-soins#centers" }
+              ]
+          },
+          {
+              "title": "Soins hospitaliers",
+              "links": [
+                  { "label": "Hôpitaux régionaux et provinciaux", "href": "/offre-de-soins#hospitals" },
+                  { "label": "Hôpitaux de proximité", "href": "/offre-de-soins#proximity" },
+                  { "label": "Espaces et districts sanitaires", "href": "/offre-de-soins#districts" }
+              ]
+          },
+          {
+              "title": "Soins hospitalo-universitaires",
+              "links": [
+                  { "label": "CHU Mohammed VI des spécialités d’Agadir", "href": "/offre-de-soins#chu-specialties" },
+                  { "label": "CHU Mohammed VI Mère-Enfant d’Agadir", "href": "/offre-de-soins#chu-mother" },
+                  { "label": "CHU Mohammed VI d’oncologie d’Agadir", "href": "/offre-de-soins#chu-oncology" },
+                  { "label": "CHU Mohammed VI de psychiatrie d’Agadir", "href": "/offre-de-soins#chu-psychiatry" }
+              ]
+          }
+      ],
+      "art": {
+          "img": "/hospital.png",
+          "tag": "RÉSEAU TERRITORIAL",
+          "title": "Trois niveaux de soins complémentaires",
+          "href": "/offre-de-soins"
+      }
+  },
+  "sante": {
+      "class": "mega public-health-menu",
+      "previewGroups": [
+          {
+              "title": "Prévention et promotion de la santé",
+              "desc": "Prévention, vaccination, dépistage et conseils pour mieux protéger sa santé.",
+              "href": "/sante-publique#prevention"
+          },
+          {
+              "title": "Programmes de santé publique",
+              "desc": "Santé de la mère et de l’enfant, santé scolaire et programmes prioritaires.",
+              "href": "/sante-publique#programmes"
+          },
+          {
+              "title": "Surveillance et sécurité sanitaires",
+              "desc": "Veille épidémiologique, alertes sanitaires et suivi des risques pour la population.",
+              "href": "/sante-publique#surveillance"
+          },
+          {
+              "title": "Mobilisation communautaire",
+              "desc": "Campagnes régionales, actions territoriales et éducation pour la santé.",
+              "href": "/sante-publique#mobilisation"
+          }
+      ],
+      "art": {
+          "img": "/prevention.png",
+          "tag": "PRÉVENIR ET PROTÉGER",
+          "title": "La santé publique au plus près des territoires",
+          "href": "/sante-publique"
+      }
+  },
+  "espace": {
+      "class": "mega groups-3",
+      "columns": [
+          {
+              "title": "Recrutement et carrière",
+              "links": [
+                  { "label": "Concours et résultats", "href": "/espace-professionnel#careers" },
+                  { "label": "Appels à candidature", "href": "/espace-professionnel#jobs" },
+                  { "label": "Examens d’aptitude professionnelle", "href": "/espace-professionnel#exams" },
+                  { "label": "Stages et formation pratique", "href": "/espace-professionnel#internships" }
+              ]
+          },
+          {
+              "title": "Fournisseurs et prestataires",
+              "links": [
+                  { "label": "Appels d’offres", "href": "/espace-professionnel#tenders" },
+                  { "label": "Avis d’appel à concurrence", "href": "/espace-professionnel#notices" },
+                  { "label": "Consultations et résultats", "href": "/espace-professionnel#results" }
+              ]
+          },
+          {
+              "title": "Recherche et innovation",
+              "links": [
+                  { "label": "Appels à projets", "href": "/espace-professionnel#research-projects" },
+                  { "label": "Publications scientifiques", "href": "/espace-professionnel#publications" },
+                  { "label": "Coopération et communication scientifique", "href": "/espace-professionnel#cooperation" }
+              ]
+          }
+      ],
+      "art": {
+          "img": "/gst-scene-3.png",
+          "tag": "PROFESSIONNELS",
+          "title": "Carrières, marchés, recherche et innovation",
+          "href": "/espace-professionnel"
+      }
+  },
+  "actu": {
+      "class": "mega groups-4",
+      "columns": [
+          {
+              "title": "Actualités",
+              "links": [
+                  { "label": "Toutes les actualités", "href": "/actualites" },
+                  { "label": "Campagnes et initiatives", "href": "/actualites#campaigns" },
+                  { "label": "Actualités des établissements", "href": "/actualites#facilities" }
+              ]
+          },
+          {
+              "title": "Événements et agenda",
+              "links": [
+                  { "label": "Événements", "href": "/actualites#events" },
+                  { "label": "Colloques, séminaires et conférences", "href": "/actualites#conferences" },
+                  { "label": "Journées nationales et mondiales", "href": "/actualites#days" }
+              ]
+          },
+          {
+              "title": "Espace presse",
+              "links": [
+                  { "label": "Communiqués de presse", "href": "/actualites#press" },
+                  { "label": "Dossiers de presse", "href": "/actualites#kits" },
+                  { "label": "Revue de presse", "href": "/actualites#review" },
+                  { "label": "Accréditation et demandes médias", "href": "/actualites#accreditation" },
+                  { "label": "Interviews et reportages", "href": "/actualites#interviews" }
+              ]
+          },
+          {
+              "title": "Centre d’écoute et d’orientation",
+              "links": [
+                  { "label": "Présentation et missions", "href": "/centre-decoute" },
+                  { "label": "Numéro, horaires et modalités de contact", "href": "/centre-decoute#contact" },
+                  { "label": "Questions fréquentes", "href": "/centre-decoute#faq" }
+              ]
+          }
+      ],
+      "art": {
+          "img": "/event.png",
+          "tag": "LE GST EN MOUVEMENT",
+          "title": "Actualités, événements et information presse",
+          "href": "/actualites"
+      }
+  }
+}
