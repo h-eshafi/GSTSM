@@ -7,7 +7,7 @@ import ActualitesPage from './pages/ActualitesPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminEditor from './pages/admin/AdminEditor';
 import AdminSettings from './pages/admin/AdminSettings';
-
+import AdminSidebar from './components/admin/AdminSidebar';
 
 function PublicLayout() {
   return (
@@ -20,7 +20,12 @@ function PublicLayout() {
 }
 
 function AdminLayout() {
-  return <Outlet />;
+  return (
+    <div className="admin-layout">
+      <AdminSidebar />
+      <Outlet />
+    </div>
+  );
 }
 
 export default function App() {

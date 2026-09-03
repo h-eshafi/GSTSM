@@ -411,18 +411,73 @@ body {
   background-color: var(--admin-bg);
 }
 
+/* Hide TinyMCE API Key Notification (Free Usage) */
+.tox-notifications-container {
+  display: none !important;
+}
+.tox-promotion {
+  display: none !important;
+}
+
+/* Fix Editor Margin */
 .editor-main {
   flex: 1;
   padding: 32px;
   max-width: 1000px;
   margin: 0 auto;
+  margin-left: 280px; /* Prevent overlap with fixed sidebar */
 }
 
-.editor-header {
+/* Fix Table Buttons Wrapping */
+.admin-table td:last-child {
+  white-space: nowrap;
+}
+
+/* Sidebar Accordion Menus */
+.admin-accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-accordion > .admin-nav-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+}
+
+.admin-accordion-caret {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  opacity: 0.5;
+}
+
+.admin-accordion-caret.open {
+  transform: rotate(180deg);
+}
+
+.admin-accordion-content {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid var(--admin-sidebar-hover);
+  margin: 4px 0 4px 16px;
+  padding: 4px 0;
+}
+
+.admin-sub-nav-item {
+  padding: 8px 16px 8px 12px;
+  color: var(--admin-text-light);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-sub-nav-item:hover, .admin-sub-nav-item.active {
+  color: #38BDF8;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .editor-title-input {

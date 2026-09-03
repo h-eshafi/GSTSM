@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
 import '../../admin.css';
@@ -82,28 +82,7 @@ export default function AdminEditor() {
   if (loading) return <div style={{ padding: '50px', textAlign: 'center' }}>Chargement de l'éditeur...</div>;
 
   return (
-    <div className="editor-layout">
-      {/* Sidebar Navigation */}
-      <aside className="admin-sidebar">
-        <div className="admin-brand">
-          <div className="admin-brand-icon">G</div>
-          <div className="admin-brand-text">
-            <h2>Admin GST</h2>
-            <span>CMS Souss-Massa</span>
-          </div>
-        </div>
-
-        <nav className="admin-nav">
-          <Link to="/admin" className="admin-nav-item">
-            ← Retour au Tableau de Bord
-          </Link>
-          <div className="admin-nav-divider"></div>
-          <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto' }}>
-            🌐 Voir le Site Public
-          </Link>
-        </nav>
-      </aside>
-
+    <>
       {/* Main Content */}
       <div className="editor-main">
         {error && (
@@ -222,6 +201,6 @@ export default function AdminEditor() {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 }

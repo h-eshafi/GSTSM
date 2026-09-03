@@ -65,55 +65,7 @@ export default function AdminDashboard() {
   const eventCount = posts.filter(p => p.type === 'evenement').length;
 
   return (
-    <div className="admin-layout">
-      {/* Sidebar Navigation */}
-      <aside className="admin-sidebar">
-        <div className="admin-brand">
-          <div className="admin-brand-icon">G</div>
-          <div className="admin-brand-text">
-            <h2>Admin GST</h2>
-            <span>CMS Souss-Massa</span>
-          </div>
-        </div>
-
-        <nav className="admin-nav">
-          <button 
-            className={`admin-nav-item ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            📊 Tableau de Bord
-          </button>
-          <button 
-            className={`admin-nav-item ${activeTab === 'pages' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pages')}
-          >
-            📄 Pages Principales ({pageCount})
-          </button>
-          <button 
-            className={`admin-nav-item ${activeTab === 'actualites' ? 'active' : ''}`}
-            onClick={() => setActiveTab('actualites')}
-          >
-            📰 Actualités ({newsCount})
-          </button>
-          <button 
-            className={`admin-nav-item ${activeTab === 'evenements' ? 'active' : ''}`}
-            onClick={() => setActiveTab('evenements')}
-          >
-            📅 Événements ({eventCount})
-          </button>
-          
-          <div className="admin-nav-divider"></div>
-          
-          <Link to="/admin/settings" className="admin-nav-item" style={{ textDecoration: 'none' }}>
-            ⚙️ Paramètres & Profil
-          </Link>
-          <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto', textDecoration: 'none' }}>
-            🌐 Voir le Site Public →
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main Content Area */}
+    <>
       <div className="admin-main-container">
         <header className="admin-topbar">
           <h1 className="admin-topbar-title">
@@ -385,6 +337,6 @@ export default function AdminDashboard() {
           )}
         </main>
       </div>
-    </div>
+    </>
   );
 }

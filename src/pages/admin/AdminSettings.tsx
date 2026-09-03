@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import '../../admin.css';
 
 export default function AdminSettings() {
@@ -26,35 +26,7 @@ export default function AdminSettings() {
   };
 
   return (
-    <div className="admin-layout">
-      {/* Sidebar Navigation */}
-      <aside className="admin-sidebar">
-        <div className="admin-brand">
-          <div className="admin-brand-icon">G</div>
-          <div className="admin-brand-text">
-            <h2>Admin GST</h2>
-            <span>CMS Souss-Massa</span>
-          </div>
-        </div>
-
-        <nav className="admin-nav">
-          <Link to="/admin" className="admin-nav-item">
-            📊 Tableau de Bord
-          </Link>
-          <Link to="/admin" className="admin-nav-item">
-            📄 Pages Principales
-          </Link>
-          <div className="admin-nav-divider"></div>
-          <Link to="/admin/settings" className="admin-nav-item active">
-            ⚙️ Paramètres & Profil
-          </Link>
-          <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto' }}>
-            🌐 Voir le Site Public
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
+    <>
       <div className="admin-main-container">
         <header className="admin-topbar">
           <h1 className="admin-topbar-title">Paramètres & Profil</h1>
@@ -199,6 +171,6 @@ export default function AdminSettings() {
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 }
