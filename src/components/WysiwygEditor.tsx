@@ -5,7 +5,7 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
   return (
     <Editor
       id={id}
-      apiKey="no-api-key"
+      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.3.0/tinymce.min.js"
       value={value}
       onEditorChange={(content) => onChange(content)}
       init={{
@@ -20,7 +20,8 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
           'bold italic forecolor | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | ' +
           'removeformat | image media table | help',
-        content_style: 'body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:16px }',
+        content_css: '/src/index.css',
+        content_style: 'body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:16px; padding: 20px; }',
       }}
     />
   );

@@ -176,7 +176,7 @@ export default function AdminEditor() {
                 <textarea 
                   value={formData.content || ''} 
                   onChange={handleTextareaChange}
-                  style={{ width: '100%', height: '500px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', border: '1px solid #E2E8F0', borderRadius: '8px', backgroundColor: '#1E293B', color: '#F8FAFC', boxSizing: 'border-box' }}
+                  style={{ width: '100%', height: '500px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', border: '1px solid #E2E8F0', borderRadius: '8px', backgroundColor: '#1E293B', color: '#F8FAFC', boxSizing: 'border-box', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                   placeholder="<h2>Votre code HTML ici...</h2>"
                 />
               ) : (
