@@ -51,18 +51,19 @@ export default function AdminDashboard() {
     loadPosts();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer la page "${id}" ?`)) {
-      // 1. Instantly remove from local UI state
-      setPosts(prev => prev.filter(p => p.id !== id));
-      removePostFromCache(id);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-      // 2. Delete from Supabase
-      const { error } = await supabase.from('posts').delete().eq('id', id);
-      if (error) {
-        console.error('Delete error:', error);
-        alert(`Erreur de suppression dans Supabase: ${error.message}`);
-      }
+  const confirmDelete = async (id: string) => {
+    // 1. Instantly remove from local UI state
+    setPosts(prev => prev.filter(p => p.id !== id));
+    removePostFromCache(id);
+    setDeleteConfirmId(null);
+
+    // 2. Delete from Supabase
+    const { error } = await supabase.from('posts').delete().eq('id', id);
+    if (error) {
+      console.error('Delete error:', error);
+      alert(`Erreur de suppression dans Supabase: ${error.message}`);
     }
   };
 
@@ -202,12 +203,31 @@ export default function AdminDashboard() {
                 ✏️ Éditer
               </button>
             </Link>
-            <button 
-              className="admin-btn admin-btn-danger" 
-              onClick={() => handleDelete(post.id)}
-            >
-              🗑️ Supprimer
-            </button>
+            {deleteConfirmId === post.id ? (
+              <span style={{ display: 'inline-flex', gap: '4px', alignItems: 'center' }}>
+                <button 
+                  className="admin-btn admin-btn-danger" 
+                  style={{ padding: '6px 12px', fontSize: '12px' }}
+                  onClick={(e) => { e.stopPropagation(); confirmDelete(post.id); }}
+                >
+                  Oui, Supprimer
+                </button>
+                <button 
+                  className="admin-btn admin-btn-secondary" 
+                  style={{ padding: '6px 10px', fontSize: '12px' }}
+                  onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(null); }}
+                >
+                  Annuler
+                </button>
+              </span>
+            ) : (
+              <button 
+                className="admin-btn admin-btn-danger" 
+                onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(post.id); }}
+              >
+                🗑️ Supprimer
+              </button>
+            )}
           </td>
         </tr>
       );
