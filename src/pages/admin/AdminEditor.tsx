@@ -23,11 +23,7 @@ export default function AdminEditor() {
   const [error, setError] = useState('');
   const [isHtmlMode, setIsHtmlMode] = useState(false);
 
-  useEffect(() => {
-    if (formData.type === 'page' && !isNew) {
-      setIsHtmlMode(true);
-    }
-  }, [formData.type, isNew]);
+  // Removed forced HTML mode to default to TinyMCE visual editor
 
   useEffect(() => {
     if (!isNew && id) {

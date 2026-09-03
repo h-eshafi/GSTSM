@@ -103,14 +103,11 @@ export default function AdminDashboard() {
           </button>
           
           <div className="admin-nav-divider"></div>
-
-          <button 
-            className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-            onClick={() => setActiveTab('settings')}
-          >
-            ⚙️ Paramètres Généraux
-          </button>
-          <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto' }}>
+          
+          <Link to="/admin/settings" className="admin-nav-item" style={{ textDecoration: 'none' }}>
+            ⚙️ Paramètres & Profil
+          </Link>
+          <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto', textDecoration: 'none' }}>
             🌐 Voir le Site Public →
           </Link>
         </nav>

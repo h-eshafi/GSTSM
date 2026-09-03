@@ -45,9 +45,10 @@ body {
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   top: 0;
-  height: 100vh;
+  left: 0;
+  bottom: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 50;
 }
@@ -139,6 +140,7 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  margin-left: 280px;
   background-color: var(--admin-bg);
 }
 
@@ -274,6 +276,8 @@ body {
 
 .admin-table-wrapper {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
 }
 
 .admin-table {
@@ -283,7 +287,7 @@ body {
 
 .admin-table th {
   text-align: left;
-  padding: 16px 24px;
+  padding: 14px 20px;
   font-size: 12px;
   font-weight: 600;
   color: var(--admin-text-muted);
@@ -291,10 +295,13 @@ body {
   letter-spacing: 0.05em;
   background: #F8FAFC;
   border-bottom: 1px solid var(--admin-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .admin-table td {
-  padding: 20px 24px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--admin-border);
   vertical-align: middle;
 }
