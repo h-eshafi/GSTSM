@@ -177,23 +177,9 @@ html, body {
     width: 100%;
   }
 
-  /* Responsive Floating Side Rail on Mobile - Scaled Down, Original Design Intact */
-  .side-rail {
-    left: 8px !important;
-    bottom: 16px !important;
-    top: auto !important;
-    transform: scale(0.78) !important;
-    transform-origin: left bottom !important;
-    z-index: 999 !important;
-  }
-
-  /* Responsive Floating Chatbot on Mobile - Scaled Down, Original Design Intact */
-  .chatbot {
-    bottom: 16px !important;
-    right: 8px !important;
-    transform: scale(0.78) !important;
-    transform-origin: right bottom !important;
-    z-index: 999 !important;
+  /* Hide Floating Widgets completely on Mobile */
+  .side-rail, .chatbot {
+    display: none !important;
   }
 
   .footer-signature {
