@@ -5,7 +5,6 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
   return (
     <Editor
       id={id}
-      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.3.0/tinymce.min.js"
       value={value}
       disabled={false}
       onEditorChange={(content) => onChange(content)}
