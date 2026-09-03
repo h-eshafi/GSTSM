@@ -108,3 +108,33 @@ nav a.active::after, nav a:hover::after {
   margin-bottom: 4px;
   font-size: 18px;
 }
+
+/* Floating Widgets Mobile Responsiveness */
+@media (max-width: 900px) {
+  .side-rail {
+    left: 8px !important;
+    bottom: 80px !important;
+    transform: scale(0.85);
+    transform-origin: bottom left;
+  }
+}
+
+@media (max-width: 600px) {
+  .side-rail button span {
+    display: none !important;
+  }
+  .side-rail button {
+    padding: 10px !important;
+    border-radius: 50% !important;
+  }
+  .chatbot {
+    bottom: 16px !important;
+  }
+  .chatbot .chat-launch span {
+    display: none !important;
+  }
+  .chatbot .chat-launch {
+    padding: 12px !important;
+    border-radius: 50% !important;
+  }
+}
