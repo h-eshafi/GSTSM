@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
 import { addPageToNavbarMenu } from '../../lib/menuStore';
-import { getPostByIdSync, updatePostInCache, type Post } from '../../lib/postsCache';
+import { getPostByIdSync, fetchFullPost, updatePostInCache, type Post } from '../../lib/postsCache';
 import '../../admin.css';
 
 export default function AdminEditor() {
@@ -28,26 +28,23 @@ export default function AdminEditor() {
 
   useEffect(() => {
     if (!isNew && id) {
-      // 1. Try instant sync lookup from memory cache
-      const cached = getPostByIdSync(id);
-      if (cached) {
-        setFormData(cached as any);
-        setLoading(false);
-      }
+      const currentId = id;
+      async function loadPostData() {
+        const cached = getPostByIdSync(currentId);
+        if (cached && cached.content) {
+          setFormData(cached as any);
+          setLoading(false);
+        }
 
-      // 2. Fetch from Supabase as fallback
-      async function fetchPost() {
-        const { data } = await supabase.from('posts').select('*').eq('id', id).maybeSingle();
-        if (data) {
-          setFormData(data);
-          updatePostInCache(data as Post);
+        const fullPost = await fetchFullPost(currentId);
+        if (fullPost) {
+          setFormData(fullPost as any);
         } else if (!cached) {
-          const currentId = id || '';
           setFormData(prev => ({ ...prev, id: currentId, title: currentId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') }));
         }
         setLoading(false);
       }
-      fetchPost();
+      loadPostData();
     }
   }, [id, isNew]);
 

@@ -48,6 +48,24 @@ export function getFloatingSettings(): FloatingSettings {
   return defaults;
 }
 
+export function getSiteFavicon(): string {
+  return localStorage.getItem('gst_site_favicon') || '/favicon.ico';
+}
+
+export function updateFavicon(url: string) {
+  try {
+    let link = document.querySelector<HTMLLinkElement>("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = url;
+  } catch (e) {
+    console.error('Error updating favicon:', e);
+  }
+}
+
 export default function AdminSettings() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'site'>('profile');
@@ -71,12 +89,16 @@ export default function AdminSettings() {
 
   const [social, setSocial] = useState<SocialLinks>(getSocialLinks());
   const [floating, setFloating] = useState<FloatingSettings>(getFloatingSettings());
+  const [favicon, setFavicon] = useState<string>(getSiteFavicon());
   const [passwords, setPasswords] = useState({ current: '', newPass: '', confirm: '' });
   const [passError, setPassError] = useState('');
 
   useEffect(() => {
     setSocial(getSocialLinks());
     setFloating(getFloatingSettings());
+    const fav = getSiteFavicon();
+    setFavicon(fav);
+    updateFavicon(fav);
   }, []);
 
   const handleSave = (e: React.FormEvent) => {
@@ -105,7 +127,9 @@ export default function AdminSettings() {
     setSaving(true);
     localStorage.setItem('gst_social_links', JSON.stringify(social));
     localStorage.setItem('gst_floating_settings', JSON.stringify(floating));
+    localStorage.setItem('gst_site_favicon', favicon);
     localStorage.setItem('gst_admin_email', profile.email);
+    updateFavicon(favicon);
     window.dispatchEvent(new Event('gst_social_updated'));
     window.dispatchEvent(new Event('gst_floating_updated'));
 
@@ -390,6 +414,46 @@ export default function AdminSettings() {
                         <option value="right">Bas Droite (Recommandé)</option>
                         <option value="left">Bas Gauche</option>
                       </select>
+                    </div>
+                  </div>
+
+                  <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px', color: '#0F172A' }}>
+                    🔖 Favicon du Site (Icône du Navigateur)
+                  </h3>
+
+                  <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '24px', display: 'flex', gap: '24px', alignItems: 'center' }}>
+                    <div style={{ width: '64px', height: '64px', borderRadius: '12px', border: '2px solid #CBD5E1', backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
+                      {favicon ? (
+                        <img src={favicon} alt="Favicon Preview" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                      ) : (
+                        <span style={{ fontSize: '24px' }}>🌐</span>
+                      )}
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase', marginBottom: '6px' }}>
+                        Téléverser un nouveau Favicon (.PNG, .ICO, .SVG)
+                      </label>
+                      <input 
+                        type="file" 
+                        accept="image/*,.ico,.svg"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              const result = reader.result as string;
+                              setFavicon(result);
+                              updateFavicon(result);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        style={{ padding: '8px', fontSize: '13px', border: '1px solid #CBD5E1', borderRadius: '8px', background: '#FFFFFF', width: '100%', cursor: 'pointer' }}
+                      />
+                      <p style={{ margin: '6px 0 0 0', fontSize: '11px', color: '#64748B' }}>
+                        Format carré recommandé (32x32px ou 64x64px). S'applique en direct sur tous les onglets du navigateur.
+                      </p>
                     </div>
                   </div>
 

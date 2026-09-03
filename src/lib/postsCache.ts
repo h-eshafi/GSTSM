@@ -27,14 +27,15 @@ export async function getCachedPosts(forceRefresh = false): Promise<Post[]> {
   isFetching = true;
   fetchPromise = (async () => {
     try {
+      // Lightweight query: Exclude heavy HTML/Base64 content field for table list speed
       const { data, error } = await supabase
         .from('posts')
-        .select('*')
+        .select('id, type, title, kicker, excerpt, image, createdAt')
         .order('createdAt', { ascending: false });
 
       if (data && data.length > 0) {
-        memoryPosts = data;
-        return data;
+        memoryPosts = data as Post[];
+        return memoryPosts;
       }
       if (error) console.error('Error fetching posts:', error);
     } catch (e) {
@@ -52,6 +53,25 @@ export async function getCachedPosts(forceRefresh = false): Promise<Post[]> {
 export function getPostByIdSync(id: string): Post | undefined {
   if (!memoryPosts) return undefined;
   return memoryPosts.find(p => p.id === id);
+}
+
+export async function fetchFullPost(id: string): Promise<Post | null> {
+  const cached = getPostByIdSync(id);
+  if (cached && cached.content) {
+    return cached;
+  }
+
+  try {
+    const { data } = await supabase.from('posts').select('*').eq('id', id).maybeSingle();
+    if (data) {
+      updatePostInCache(data);
+      return data;
+    }
+  } catch (e) {
+    console.error('Error fetching full post:', e);
+  }
+
+  return cached || null;
 }
 
 export function updatePostInCache(post: Post): void {

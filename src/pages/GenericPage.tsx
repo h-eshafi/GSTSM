@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPostByIdSync, getCachedPosts } from '../lib/postsCache';
+import { getPostByIdSync, fetchFullPost } from '../lib/postsCache';
 
 export default function GenericPage({ explicitSlug }: { explicitSlug?: string }) {
   const params = useParams<{ slug: string }>();
@@ -12,18 +12,15 @@ export default function GenericPage({ explicitSlug }: { explicitSlug?: string })
     async function loadPage() {
       if (!slug) return;
 
-      // 1. Try instant sync lookup from memory cache
       const cached = getPostByIdSync(slug);
-      if (cached) {
+      if (cached && cached.content) {
         setPageData(cached);
         setLoading(false);
       }
 
-      // 2. Fetch/sync from cached posts
-      const posts = await getCachedPosts();
-      const match = posts.find(p => p.id === slug);
-      if (match) {
-        setPageData(match);
+      const fullPost = await fetchFullPost(slug);
+      if (fullPost) {
+        setPageData(fullPost);
       }
       setLoading(false);
     }

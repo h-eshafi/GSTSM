@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -6,7 +7,7 @@ import GenericPage from './pages/GenericPage';
 import ActualitesPage from './pages/ActualitesPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminEditor from './pages/admin/AdminEditor';
-import AdminSettings from './pages/admin/AdminSettings';
+import AdminSettings, { getSiteFavicon, updateFavicon } from './pages/admin/AdminSettings';
 import AdminMenus from './pages/admin/AdminMenus';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminSidebar from './components/admin/AdminSidebar';
@@ -41,6 +42,10 @@ function AdminLayout() {
 }
 
 export default function App() {
+  useEffect(() => {
+    updateFavicon(getSiteFavicon());
+  }, []);
+
   return (
     <Router>
       <Routes>
