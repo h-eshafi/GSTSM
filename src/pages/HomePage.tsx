@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { getCachedPosts } from '../lib/postsCache';
 
 const territoryData = {
     'Agadir': {
@@ -41,28 +41,19 @@ export default function HomePage() {
   const [evenements, setEvenements] = useState<any[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
-      // Fetch latest 6 actualites
-      const { data: actData } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('type', 'actualite')
-        .order('createdAt', { ascending: false })
-        .limit(6);
-      
-      if (actData) setActualites(actData);
-
-      // Fetch latest 3 events
-      const { data: evtData } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('type', 'evenement')
-        .order('createdAt', { ascending: false })
-        .limit(3);
-      
-      if (evtData) setEvenements(evtData);
+    async function loadData() {
+      const posts = await getCachedPosts();
+      if (posts && posts.length > 0) {
+        setActualites(posts.filter(p => p.type === 'actualite').slice(0, 6));
+        setEvenements(posts.filter(p => p.type === 'evenement').slice(0, 3));
+      }
+      const fresh = await getCachedPosts(true);
+      if (fresh && fresh.length > 0) {
+        setActualites(fresh.filter(p => p.type === 'actualite').slice(0, 6));
+        setEvenements(fresh.filter(p => p.type === 'evenement').slice(0, 3));
+      }
     }
-    fetchData();
+    loadData();
   }, []);
 
   const activeMapData = territoryData[activeProvince];

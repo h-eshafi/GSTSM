@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { getPostByIdSync, getCachedPosts } from '../lib/postsCache';
 
 export default function GenericPage({ explicitSlug }: { explicitSlug?: string }) {
   const params = useParams<{ slug: string }>();
@@ -9,25 +9,25 @@ export default function GenericPage({ explicitSlug }: { explicitSlug?: string })
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPage() {
+    async function loadPage() {
       if (!slug) return;
-      setLoading(true);
-      setPageData(null); // Clear previous page data
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('id', slug)
-        .single();
-        
-      if (data) {
-        setPageData(data);
-      } else {
-        console.error('Error fetching page:', error);
+
+      // 1. Try instant sync lookup from memory cache
+      const cached = getPostByIdSync(slug);
+      if (cached) {
+        setPageData(cached);
+        setLoading(false);
       }
-      
+
+      // 2. Fetch/sync from cached posts
+      const posts = await getCachedPosts();
+      const match = posts.find(p => p.id === slug);
+      if (match) {
+        setPageData(match);
+      }
       setLoading(false);
     }
-    fetchPage();
+    loadPage();
   }, [slug]);
 
   if (loading) {

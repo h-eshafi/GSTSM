@@ -1,26 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { getCachedPosts } from '../lib/postsCache';
 
 export default function ActualitesPage() {
   const [actualites, setActualites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchActualites() {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .in('type', ['actualite', 'evenement'])
-        .order('createdAt', { ascending: false });
-        
-      if (data) setActualites(data);
-      else console.error(error);
-      
+    async function loadActualites() {
+      const posts = await getCachedPosts();
+      const newsItems = posts.filter(p => p.type === 'actualite' || p.type === 'evenement');
+      if (newsItems.length > 0) {
+        setActualites(newsItems);
+        setLoading(false);
+      }
+      const fresh = await getCachedPosts(true);
+      const freshNews = fresh.filter(p => p.type === 'actualite' || p.type === 'evenement');
+      setActualites(freshNews);
       setLoading(false);
     }
-    fetchActualites();
+    loadActualites();
   }, []);
 
   return (
