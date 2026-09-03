@@ -15,8 +15,10 @@ export default function AdminLogin() {
     e.preventDefault();
     setError('');
 
-    // Default admin validation
-    if (email.trim().toLowerCase() === 'gstsm@gmail.com' && password === 'Admin2026$') {
+    const validEmail = (localStorage.getItem('gst_admin_email') || 'gstsm@gmail.com').toLowerCase();
+    const validPassword = localStorage.getItem('gst_admin_password') || 'Admin2026$';
+
+    if (email.trim().toLowerCase() === validEmail && password === validPassword) {
       localStorage.setItem('gst_admin_authenticated', 'true');
       localStorage.setItem('gst_admin_email', email);
       navigate('/admin');

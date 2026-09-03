@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
 import { addPageToNavbarMenu } from '../../lib/menuStore';
+import { getPostByIdSync, updatePostInCache, type Post } from '../../lib/postsCache';
 import '../../admin.css';
 
 export default function AdminEditor() {
@@ -27,12 +28,20 @@ export default function AdminEditor() {
 
   useEffect(() => {
     if (!isNew && id) {
+      // 1. Try instant sync lookup from memory cache
+      const cached = getPostByIdSync(id);
+      if (cached) {
+        setFormData(cached as any);
+        setLoading(false);
+      }
+
+      // 2. Fetch from Supabase as fallback
       async function fetchPost() {
         const { data } = await supabase.from('posts').select('*').eq('id', id).maybeSingle();
         if (data) {
           setFormData(data);
-        } else {
-          // If not found in database yet, initialize clean form for this slug
+          updatePostInCache(data as Post);
+        } else if (!cached) {
           const currentId = id || '';
           setFormData(prev => ({ ...prev, id: currentId, title: currentId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') }));
         }
@@ -64,6 +73,20 @@ export default function AdminEditor() {
       setSaving(false);
       return;
     }
+
+    const postToSave = {
+      id: formData.id,
+      type: formData.type,
+      title: formData.title,
+      kicker: formData.kicker || '',
+      excerpt: formData.excerpt || '',
+      image: formData.image || '',
+      content: formData.content || '',
+      createdAt: new Date().toISOString()
+    };
+
+    // Update memory cache immediately
+    updatePostInCache(postToSave as Post);
 
     const { error: upsertError } = await supabase.from('posts').upsert({
       id: formData.id,

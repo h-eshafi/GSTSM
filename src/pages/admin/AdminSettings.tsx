@@ -47,6 +47,8 @@ export default function AdminSettings() {
   });
 
   const [social, setSocial] = useState<SocialLinks>(getSocialLinks());
+  const [passwords, setPasswords] = useState({ current: '', newPass: '', confirm: '' });
+  const [passError, setPassError] = useState('');
 
   useEffect(() => {
     setSocial(getSocialLinks());
@@ -54,6 +56,27 @@ export default function AdminSettings() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    setPassError('');
+
+    // If attempting password change
+    if (passwords.current || passwords.newPass || passwords.confirm) {
+      const storedPass = localStorage.getItem('gst_admin_password') || 'Admin2026$';
+      if (passwords.current !== storedPass) {
+        setPassError('Le mot de passe actuel est incorrect.');
+        return;
+      }
+      if (passwords.newPass.length < 6) {
+        setPassError('Le nouveau mot de passe doit comporter au moins 6 caractères.');
+        return;
+      }
+      if (passwords.newPass !== passwords.confirm) {
+        setPassError('Le nouveau mot de passe et sa confirmation ne correspondent pas.');
+        return;
+      }
+      localStorage.setItem('gst_admin_password', passwords.newPass);
+      setPasswords({ current: '', newPass: '', confirm: '' });
+    }
+
     setSaving(true);
     localStorage.setItem('gst_social_links', JSON.stringify(social));
     localStorage.setItem('gst_admin_email', profile.email);
@@ -198,14 +221,58 @@ export default function AdminSettings() {
 
               {activeTab === 'security' && (
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '20px', marginTop: 0 }}>Sécurité & Serveur SMTP</h2>
+                  <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '20px', marginTop: 0 }}>Sécurité & Mot de passe</h2>
                   
                   <div className="editor-meta-group" style={{ marginBottom: '24px' }}>
                     <label>Adresse E-mail de connexion Administrateur</label>
                     <input type="email" className="admin-input" value={profile.email} onChange={(e) => setProfile({...profile, email: e.target.value})} />
                   </div>
 
-                  <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px', color: '#0F172A' }}>
+                    🔑 Modifier le Mot de Passe Administrateur
+                  </h3>
+
+                  <div className="editor-meta-group" style={{ marginBottom: '16px' }}>
+                    <label>Mot de passe actuel</label>
+                    <input 
+                      type="password" 
+                      className="admin-input" 
+                      placeholder="Saisissez votre mot de passe actuel"
+                      value={passwords.current}
+                      onChange={(e) => setPasswords({...passwords, current: e.target.value})}
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
+                    <div className="editor-meta-group">
+                      <label>Nouveau mot de passe</label>
+                      <input 
+                        type="password" 
+                        className="admin-input" 
+                        placeholder="Nouveau mot de passe"
+                        value={passwords.newPass}
+                        onChange={(e) => setPasswords({...passwords, newPass: e.target.value})}
+                      />
+                    </div>
+                    <div className="editor-meta-group">
+                      <label>Confirmer le nouveau mot de passe</label>
+                      <input 
+                        type="password" 
+                        className="admin-input" 
+                        placeholder="Confirmer le mot de passe"
+                        value={passwords.confirm}
+                        onChange={(e) => setPasswords({...passwords, confirm: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  {passError && (
+                    <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '24px' }}>
+                      ⚠️ {passError}
+                    </div>
+                  )}
+
+                  <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px', color: '#0F172A' }}>
                     📧 Configuration Serveur E-mail SMTP (Envoi de Codes)
                   </h3>
                   

@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import megaMenuDataRaw from '../../data/menus.json';
 
+import { getCachedPosts, removePostFromCache } from '../../lib/postsCache';
+
 interface Post {
   id: string;
   type: string;
@@ -35,19 +37,25 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select('id, type, title, kicker, image, createdAt').order('createdAt', { ascending: false });
-      if (data) setPosts(data);
-      if (error) console.error('Error fetching posts:', error);
+    async function loadPosts() {
+      const data = await getCachedPosts();
+      if (data && data.length > 0) {
+        setPosts(data);
+        setLoading(false);
+      }
+      // Background sync
+      const freshData = await getCachedPosts(true);
+      setPosts(freshData);
       setLoading(false);
     }
-    fetchPosts();
+    loadPosts();
   }, []);
 
   const handleDelete = async (id: string) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer la page ${id} ?`)) {
-      await supabase.from('posts').delete().eq('id', id);
+      removePostFromCache(id);
       setPosts(posts.filter(p => p.id !== id));
+      await supabase.from('posts').delete().eq('id', id);
     }
   };
 
