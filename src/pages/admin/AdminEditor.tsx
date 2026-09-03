@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
+import { addPageToNavbarMenu } from '../../lib/menuStore';
 import '../../admin.css';
 
 export default function AdminEditor() {
@@ -18,6 +19,7 @@ export default function AdminEditor() {
     image: '',
     content: ''
   });
+  const [navbarCategory, setNavbarCategory] = useState<string>('');
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -73,6 +75,9 @@ export default function AdminEditor() {
     if (upsertError) {
       setError(upsertError.message);
     } else {
+      if (navbarCategory) {
+        addPageToNavbarMenu(formData.title, formData.id, navbarCategory);
+      }
       navigate('/admin');
     }
   };
@@ -143,31 +148,24 @@ export default function AdminEditor() {
             <div className="editor-meta-group">
               <label>Emplacement Menu Navbar</label>
               <select 
-                name="menuPlacement"
-                value={formData.kicker || ''} 
-                onChange={(e) => setFormData({ ...formData, kicker: e.target.value })}
+                name="navbarCategory"
+                value={navbarCategory} 
+                onChange={(e) => setNavbarCategory(e.target.value)}
               >
-                <option value="">-- Ne pas inclure dans le menu --</option>
-                <option value="LE GST SOUSS-MASSA">1. Le GST Souss-Massa</option>
-                <option value="PATIENTS ET PROCHES">2. Patients et Proches</option>
-                <option value="OFFRE DE SOINS">3. Offre de Soins</option>
-                <option value="SANTÉ PUBLIQUE">4. Santé Publique</option>
-                <option value="ESPACE PROFESSIONNEL">5. Espace Professionnel</option>
-                <option value="ACTUALITÉS ET MÉDIAS">6. Actualités et Médias</option>
+                <option value="">-- Ne pas inclure dans la Navbar --</option>
+                <option value="gst">1. Le GST Souss-Massa</option>
+                <option value="patients">2. Patients et Proches</option>
+                <option value="offre">3. Offre de Soins</option>
+                <option value="sante">4. Santé Publique</option>
+                <option value="espace">5. Espace Professionnel</option>
+                <option value="actu">6. Actualités et Médias</option>
               </select>
             </div>
             
             <div className="editor-meta-group" style={{ gridColumn: 'span 2' }}>
-              <label>Image de couverture (URL ou Fichier local)</label>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <input 
-                    type="text" 
-                    name="image" 
-                    value={formData.image || ''} 
-                    onChange={handleChange} 
-                    placeholder="ex: /gst-scene-2.png ou https://..."
-                  />
+              <label>Image de couverture (Téléverser un fichier)</label>
+              <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <input 
                     type="file" 
                     accept="image/*"
@@ -176,20 +174,23 @@ export default function AdminEditor() {
                       if (file) {
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                          setFormData(prev => ({ ...prev, image: reader.result as string }));
+                          setFormData((prev: typeof formData) => ({ ...prev, image: reader.result as string }));
                         };
                         reader.readAsDataURL(file);
                       }
                     }}
-                    style={{ fontSize: '12px' }}
+                    style={{ padding: '12px', border: '1px solid #E2E8F0', borderRadius: '8px', background: '#FFFFFF', cursor: 'pointer', fontSize: '13px' }}
                   />
+                  <span style={{ fontSize: '12px', color: '#64748B' }}>
+                    Sélectionnez une image sur votre ordinateur pour la définir comme couverture de page.
+                  </span>
                 </div>
 
                 {formData.image && (
-                  <div style={{ width: '90px', height: '65px', borderRadius: '8px', border: '1px solid #E2E8F0', overflow: 'hidden', flexShrink: 0, backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '220px', height: '130px', borderRadius: '12px', border: '2px solid #CBD5E1', overflow: 'hidden', flexShrink: 0, backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.08)' }}>
                     <img 
                       src={formData.image} 
-                      alt="Aperçu" 
+                      alt="Aperçu de couverture" 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                       onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
                     />

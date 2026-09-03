@@ -1,13 +1,20 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import megaMenuDataRaw from '../data/menus.json';
-
-const megaMenuData: Record<string, any> = megaMenuDataRaw;
+import { getMenuData } from '../lib/menuStore';
 
 export default function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [megaMenuData, setMegaMenuData] = useState<Record<string, any>>(getMenuData());
   const timeoutRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setMegaMenuData(getMenuData());
+    };
+    window.addEventListener('gst_menu_updated', handleUpdate);
+    return () => window.removeEventListener('gst_menu_updated', handleUpdate);
+  }, []);
 
   const handleMouseEnter = (menuId: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
