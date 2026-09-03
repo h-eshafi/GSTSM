@@ -1,6 +1,19 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getFloatingSettings, type FloatingSettings } from '../pages/admin/AdminSettings';
 
 export default function SideRail() {
+  const [settings, setSettings] = useState<FloatingSettings>(getFloatingSettings());
+
+  useEffect(() => {
+    const handleUpdate = () => setSettings(getFloatingSettings());
+    window.addEventListener('gst_floating_updated', handleUpdate);
+    return () => window.removeEventListener('gst_floating_updated', handleUpdate);
+  }, []);
+
+  if (!settings.enableSideRail) {
+    return null;
+  }
   return (
     <aside className="side-rail" aria-label="Accès rapides">
       <Link to="/pages/urgences-et-aide-medicale-urgente" style={{textDecoration: 'none', display: 'contents'}}>

@@ -9,6 +9,13 @@ export interface SocialLinks {
   youtube: string;
 }
 
+export interface FloatingSettings {
+  enableSideRail: boolean;
+  enableChatbot: boolean;
+  chatbotPosition: 'right' | 'left';
+  samuNumber: string;
+}
+
 export function getSocialLinks(): SocialLinks {
   const defaults: SocialLinks = {
     facebook: 'https://facebook.com/gst-soussmassa',
@@ -18,6 +25,22 @@ export function getSocialLinks(): SocialLinks {
   };
   try {
     const saved = localStorage.getItem('gst_social_links');
+    if (saved) return { ...defaults, ...JSON.parse(saved) };
+  } catch (e) {
+    console.error(e);
+  }
+  return defaults;
+}
+
+export function getFloatingSettings(): FloatingSettings {
+  const defaults: FloatingSettings = {
+    enableSideRail: true,
+    enableChatbot: true,
+    chatbotPosition: 'right',
+    samuNumber: '141'
+  };
+  try {
+    const saved = localStorage.getItem('gst_floating_settings');
     if (saved) return { ...defaults, ...JSON.parse(saved) };
   } catch (e) {
     console.error(e);
@@ -47,11 +70,13 @@ export default function AdminSettings() {
   });
 
   const [social, setSocial] = useState<SocialLinks>(getSocialLinks());
+  const [floating, setFloating] = useState<FloatingSettings>(getFloatingSettings());
   const [passwords, setPasswords] = useState({ current: '', newPass: '', confirm: '' });
   const [passError, setPassError] = useState('');
 
   useEffect(() => {
     setSocial(getSocialLinks());
+    setFloating(getFloatingSettings());
   }, []);
 
   const handleSave = (e: React.FormEvent) => {
@@ -79,8 +104,10 @@ export default function AdminSettings() {
 
     setSaving(true);
     localStorage.setItem('gst_social_links', JSON.stringify(social));
+    localStorage.setItem('gst_floating_settings', JSON.stringify(floating));
     localStorage.setItem('gst_admin_email', profile.email);
     window.dispatchEvent(new Event('gst_social_updated'));
+    window.dispatchEvent(new Event('gst_floating_updated'));
 
     setTimeout(() => {
       setSaving(false);
@@ -309,14 +336,60 @@ export default function AdminSettings() {
                     <input type="text" className="admin-input" defaultValue="Groupement Sanitaire Territorial de la Région Souss-Massa" />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
                     <div className="editor-meta-group">
                       <label>Numéro d'Urgence SAMU</label>
-                      <input type="text" className="admin-input" defaultValue="141" />
+                      <input 
+                        type="text" 
+                        className="admin-input" 
+                        value={floating.samuNumber} 
+                        onChange={(e) => setFloating({...floating, samuNumber: e.target.value})} 
+                      />
                     </div>
                     <div className="editor-meta-group">
                       <label>E-mail de Contact Public</label>
                       <input type="email" className="admin-input" defaultValue="contact@gst-soussmassa.ma" />
+                    </div>
+                  </div>
+
+                  <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px', color: '#0F172A' }}>
+                    🎈 Activation des Widgets Flottants (Pages Publiques)
+                  </h3>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', backgroundColor: '#F8FAFC', padding: '20px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '24px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', color: '#0F172A' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={floating.enableSideRail} 
+                        onChange={(e) => setFloating({...floating, enableSideRail: e.target.checked})}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                      />
+                      <span>Activer le menu flottant d'accès rapide à gauche (Urgences / RDV / Écoute)</span>
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', color: '#0F172A' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={floating.enableChatbot} 
+                        onChange={(e) => setFloating({...floating, enableChatbot: e.target.checked})}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                      />
+                      <span>Activer le bouton Assistant Virtuel Chatbot ("Besoin d'aide ?")</span>
+                    </label>
+
+                    <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B' }}>
+                        Position du bouton Chatbot :
+                      </label>
+                      <select 
+                        className="admin-input" 
+                        value={floating.chatbotPosition} 
+                        onChange={(e) => setFloating({...floating, chatbotPosition: e.target.value as 'right' | 'left'})}
+                        style={{ width: '220px', padding: '6px 12px', fontSize: '13px' }}
+                      >
+                        <option value="right">Bas Droite (Recommandé)</option>
+                        <option value="left">Bas Gauche</option>
+                      </select>
                     </div>
                   </div>
 

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getFloatingSettings, type FloatingSettings } from '../pages/admin/AdminSettings';
 
 interface Message {
   sender: 'bot' | 'user';
@@ -7,6 +8,7 @@ interface Message {
 }
 
 export default function Chatbot() {
+  const [settings, setSettings] = useState<FloatingSettings>(getFloatingSettings());
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -22,12 +24,22 @@ export default function Chatbot() {
     }
   ]);
 
+  useEffect(() => {
+    const handleUpdate = () => setSettings(getFloatingSettings());
+    window.addEventListener('gst_floating_updated', handleUpdate);
+    return () => window.removeEventListener('gst_floating_updated', handleUpdate);
+  }, []);
+
+  if (!settings.enableChatbot) {
+    return null;
+  }
+
   const handleOptionClick = (action: string) => {
     let replyText = '';
     let newOptions: { label: string; action: string }[] | undefined = undefined;
 
     if (action === 'samu') {
-      replyText = 'En cas d\'urgence médicale urgente, appelez directement le SAMU au 141 (gratuit 24h/24 et 7j/7). Les services d\'urgence de l\'Hôpital Régional Hassan II et du CHU d\'Agadir sont ouverts en permanence.';
+      replyText = `En cas d'urgence médicale urgente, appelez directement le SAMU au ${settings.samuNumber} (gratuit 24h/24 et 7j/7). Les services d'urgence de l'Hôpital Régional Hassan II et du CHU d'Agadir sont ouverts en permanence.`;
       newOptions = [
         { label: '📅 Prise de Rendez-vous', action: 'rdv' },
         { label: '🏥 Nos Hôpitaux', action: 'hopitaux' }
@@ -74,7 +86,7 @@ export default function Chatbot() {
       const lower = userText.toLowerCase();
 
       if (lower.includes('urgenc') || lower.includes('samu') || lower.includes('141')) {
-        botResponse = 'Pour les urgences vitales, composer immédiatement le 141. Les services d\'urgence restent ouverts 24h/24.';
+        botResponse = `Pour les urgences vitales, composer immédiatement le ${settings.samuNumber}. Les services d'urgence restent ouverts 24h/24.`;
       } else if (lower.includes('rdv') || lower.includes('rendez') || lower.includes('consultation')) {
         botResponse = 'Vous pouvez planifier vos rendez-vous de consultation directement depuis la rubrique "Patients et Proches".';
       } else if (lower.includes('contact') || lower.includes('telephone') || lower.includes('adresse')) {
@@ -95,10 +107,12 @@ export default function Chatbot() {
     }, 500);
   };
 
+  const isLeft = settings.chatbotPosition === 'left';
+
   return (
     <>
-      {/* Right Floating Launcher Button */}
-      <div className="chatbot">
+      {/* Floating Launcher Button */}
+      <div className="chatbot" style={isLeft ? { left: '24px', right: 'auto' } : undefined}>
         <button 
           className="chat-launch" 
           aria-label="Ouvrir l’assistant"
@@ -114,7 +128,7 @@ export default function Chatbot() {
 
       {/* Interactive Chat Window Modal */}
       {isOpen && (
-        <div style={{ position: 'fixed', bottom: '90px', right: '24px', width: '360px', height: '480px', backgroundColor: '#FFFFFF', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.18)', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', zIndex: 9999, overflow: 'hidden' }}>
+        <div style={{ position: 'fixed', bottom: '90px', right: isLeft ? 'auto' : '24px', left: isLeft ? '24px' : 'auto', width: '360px', height: '480px', backgroundColor: '#FFFFFF', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.18)', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', zIndex: 9999, overflow: 'hidden' }}>
           
           {/* Chat Header */}
           <div style={{ backgroundColor: '#2563EB', color: '#FFFFFF', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
