@@ -5,8 +5,7 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
   return (
     <Editor
       id={id}
-      apiKey="4qv18891sfw90yuvulh2hk3dltsdjub7ccl1su102l7nkkqg"
-      tinymceScriptSrc="https://cdn.tiny.cloud/1/4qv18891sfw90yuvulh2hk3dltsdjub7ccl1su102l7nkkqg/tinymce/8/tinymce.min.js"
+      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.3.0/tinymce.min.js"
       value={value}
       disabled={false}
       onEditorChange={(content) => onChange(content)}
@@ -14,11 +13,9 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
         height: 550,
         menubar: true,
         plugins: [
-          'accordion', 'advlist', 'anchor', 'autolink', 'autoresize', 'autosave',
-          'charmap', 'code', 'codesample', 'directionality', 'emoticons', 'fullscreen',
-          'help', 'image', 'importcss', 'insertdatetime', 'link', 'lists', 'media',
-          'nonbreaking', 'pagebreak', 'preview', 'quickbars', 'save', 'searchreplace',
-          'table', 'visualblocks', 'visualchars', 'wordcount'
+          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
         ],
         toolbar: 'undo redo | blocks fontfamily fontsize | ' +
           'bold italic underline strikethrough forecolor backcolor | alignleft aligncenter ' +
