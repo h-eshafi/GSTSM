@@ -109,32 +109,180 @@ nav a.active::after, nav a:hover::after {
   font-size: 18px;
 }
 
-/* Floating Widgets Mobile Responsiveness */
-@media (max-width: 900px) {
-  .side-rail {
-    left: 8px !important;
-    bottom: 80px !important;
-    transform: scale(0.85);
-    transform-origin: bottom left;
-  }
+/* Floating Widgets (Side Rail & Chatbot) Clean Styling */
+.side-rail {
+  position: fixed;
+  left: 16px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
 }
 
-@media (max-width: 600px) {
-  .side-rail button span {
-    display: none !important;
+.side-rail button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.side-rail button:hover {
+  transform: translateX(4px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.side-rail button.samu {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: #FFFFFF;
+  border: none;
+}
+
+.side-rail button.rdv {
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF;
+  border: none;
+}
+
+.side-rail button.ecoute {
+  background: linear-gradient(135deg, #0D9488, #0F766E);
+  color: #FFFFFF;
+  border: none;
+}
+
+.side-rail button i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.side-rail button i svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.side-rail button span {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-rail button span b {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.side-rail button span small {
+  font-size: 10px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+/* Chatbot Floating Launcher */
+.chatbot {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+}
+
+.chatbot .chat-launch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.chatbot .chat-launch:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
+}
+
+.chatbot .chat-launch i {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot .chat-launch span b {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.chatbot .chat-launch span small {
+  font-size: 10px;
+  opacity: 0.85;
+}
+
+/* Responsive Mobile Layout (Stacked Vertical Icons / Pills) */
+@media (max-width: 768px) {
+  .side-rail {
+    left: 12px;
+    bottom: 20px;
+    gap: 8px;
   }
+
   .side-rail button {
-    padding: 10px !important;
-    border-radius: 50% !important;
+    padding: 8px 12px;
+    border-radius: 30px;
   }
+
+  .side-rail button span small {
+    display: none;
+  }
+
+  .side-rail button span b {
+    font-size: 11px;
+  }
+
+  .side-rail button i svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .chatbot {
-    bottom: 16px !important;
+    right: 12px;
+    bottom: 20px;
   }
-  .chatbot .chat-launch span {
-    display: none !important;
-  }
+
   .chatbot .chat-launch {
-    padding: 12px !important;
-    border-radius: 50% !important;
+    padding: 10px 14px;
+    border-radius: 30px;
+  }
+
+  .chatbot .chat-launch span small {
+    display: none;
+  }
+
+  .chatbot .chat-launch span b {
+    font-size: 11px;
   }
 }
