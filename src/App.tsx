@@ -24,7 +24,7 @@ function AdminLayout() {
 
 export default function App() {
   return (
-    <Router basename="/GSTSM">
+    <Router>
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
