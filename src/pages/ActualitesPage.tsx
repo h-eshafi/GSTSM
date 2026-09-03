@@ -49,11 +49,18 @@ export default function ActualitesPage() {
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                {post.image && (
-                  <div style={{ height: '200px', overflow: 'hidden' }}>
-                    <img src={post.image.startsWith('/') ? post.image : `/${post.image}`} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                )}
+                <div style={{ height: '200px', overflow: 'hidden', backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <img 
+                    src={
+                      !post.image ? '/event.png' :
+                      (post.image.startsWith('data:') || post.image.startsWith('http://') || post.image.startsWith('https://'))
+                        ? post.image 
+                        : (post.image.startsWith('/') ? post.image : `/${post.image}`)
+                    } 
+                    alt={post.title} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                </div>
                 <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <span style={{ 
                     background: post.type === 'actualite' ? '#dbeafe' : '#fce7f3', 

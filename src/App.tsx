@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -8,6 +8,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminEditor from './pages/admin/AdminEditor';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminMenus from './pages/admin/AdminMenus';
+import AdminLogin from './pages/admin/AdminLogin';
 import AdminSidebar from './components/admin/AdminSidebar';
 
 function PublicLayout() {
@@ -21,6 +22,12 @@ function PublicLayout() {
 }
 
 function AdminLayout() {
+  const isAuthenticated = localStorage.getItem('gst_admin_authenticated') === 'true';
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
   return (
     <div className="admin-layout">
       <AdminSidebar />
@@ -44,6 +51,8 @@ export default function App() {
           <Route path="/pages/:slug" element={<GenericPage />} />
         </Route>
         
+        <Route path="/admin/login" element={<AdminLogin />} />
+
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="menus" element={<AdminMenus />} />

@@ -143,7 +143,15 @@ export default function HomePage() {
               <Link key={post.id} to={`/pages/${post.id}`} style={{textDecoration: 'none', color: 'inherit', display: 'contents'}}>
                 <article style={{cursor: 'pointer'}}>
                   <div className="news-visual">
-                    {post.image && <img src={post.image.startsWith('/') ? post.image : `/${post.image}`} alt=""/>}
+                    <img 
+                      src={
+                        !post.image ? '/gst-scene-2.png' :
+                        (post.image.startsWith('data:') || post.image.startsWith('http://') || post.image.startsWith('https://'))
+                          ? post.image 
+                          : (post.image.startsWith('/') ? post.image : `/${post.image}`)
+                      } 
+                      alt={post.title}
+                    />
                     <b>{post.kicker || 'Actualité'}</b>
                   </div>
                   <small>Actualité régionale</small>

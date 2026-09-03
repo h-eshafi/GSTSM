@@ -106,13 +106,23 @@ export default function AdminDashboard() {
 
   const renderTableRows = (items: Post[]) => {
     if (loading) {
-      return (
-        <tr>
-          <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: '#64748B' }}>
-            Chargement des contenus Supabase...
+      return Array.from({ length: 5 }).map((_, idx) => (
+        <tr key={idx} style={{ opacity: 0.7 }}>
+          <td style={{ width: '40px' }}><div style={{ width: '16px', height: '16px', borderRadius: '4px', background: '#E2E8F0' }}></div></td>
+          <td>
+            <div className="page-thumb-cell">
+              <div className="page-thumb" style={{ background: '#E2E8F0' }}></div>
+              <div>
+                <div style={{ width: '180px', height: '14px', borderRadius: '4px', background: '#E2E8F0', marginBottom: '6px' }}></div>
+                <div style={{ width: '120px', height: '10px', borderRadius: '4px', background: '#F1F5F9' }}></div>
+              </div>
+            </div>
           </td>
+          <td><div style={{ width: '110px', height: '22px', borderRadius: '100px', background: '#E2E8F0' }}></div></td>
+          <td><div style={{ width: '80px', height: '14px', borderRadius: '4px', background: '#E2E8F0' }}></div></td>
+          <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}><div style={{ width: '140px', height: '28px', borderRadius: '6px', background: '#E2E8F0', marginLeft: 'auto' }}></div></td>
         </tr>
-      );
+      ));
     }
 
     if (items.length === 0) {

@@ -28,9 +28,14 @@ export default function AdminEditor() {
   useEffect(() => {
     if (!isNew && id) {
       async function fetchPost() {
-        const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
-        if (data) setFormData(data);
-        if (error) setError('Échec du chargement du contenu');
+        const { data } = await supabase.from('posts').select('*').eq('id', id).maybeSingle();
+        if (data) {
+          setFormData(data);
+        } else {
+          // If not found in database yet, initialize clean form for this slug
+          const currentId = id || '';
+          setFormData(prev => ({ ...prev, id: currentId, title: currentId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') }));
+        }
         setLoading(false);
       }
       fetchPost();

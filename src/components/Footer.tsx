@@ -1,6 +1,18 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getSocialLinks, type SocialLinks } from '../pages/admin/AdminSettings';
 
 export default function Footer() {
+  const [social, setSocial] = useState<SocialLinks>(getSocialLinks());
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setSocial(getSocialLinks());
+    };
+    window.addEventListener('gst_social_updated', handleUpdate);
+    return () => window.removeEventListener('gst_social_updated', handleUpdate);
+  }, []);
+
   return (
     <footer className="site-footer">
       <div className="footer-useful">
@@ -80,10 +92,10 @@ export default function Footer() {
         <div>
           <span>Information institutionnelle en français</span>
           <span className="footer-dot"></span>
-          <button>Facebook</button>
-          <button>Instagram</button>
-          <button>LinkedIn</button>
-          <button>YouTube</button>
+          <a href={social.facebook} target="_blank" rel="noopener noreferrer"><button>Facebook</button></a>
+          <a href={social.instagram} target="_blank" rel="noopener noreferrer"><button>Instagram</button></a>
+          <a href={social.linkedin} target="_blank" rel="noopener noreferrer"><button>LinkedIn</button></a>
+          <a href={social.youtube} target="_blank" rel="noopener noreferrer"><button>YouTube</button></a>
         </div>
       </div>
     </footer>
