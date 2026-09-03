@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        <main className="admin-content-area">
+        <main className="admin-content">
           {/* KPI Metrics Summary Row */}
           <div className="admin-kpi-grid">
             <div className="admin-kpi-card" onClick={() => setActiveTab('pages')} style={{ cursor: 'pointer' }}>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
 import '../../admin.css';
 
@@ -87,7 +86,7 @@ export default function AdminEditor() {
   if (loading) return <div style={{ padding: '50px', textAlign: 'center' }}>Chargement de l'éditeur...</div>;
 
   return (
-    <div className="admin-layout">
+    <div className="editor-layout">
       {/* Sidebar Navigation */}
       <aside className="admin-sidebar">
         <div className="admin-brand">
@@ -100,7 +99,7 @@ export default function AdminEditor() {
 
         <nav className="admin-nav">
           <Link to="/admin" className="admin-nav-item">
-            ← Tableau de Bord
+            ← Retour au Tableau de Bord
           </Link>
           <div className="admin-nav-divider"></div>
           <Link to="/" className="admin-nav-item" style={{ marginTop: 'auto' }}>
@@ -110,159 +109,122 @@ export default function AdminEditor() {
       </aside>
 
       {/* Main Content */}
-      <div className="admin-main-container">
-        <header className="admin-topbar">
-          <h1 className="admin-topbar-title">{isNew ? '✍️ Nouveau Contenu' : `✏️ Édition: ${formData.title}`}</h1>
-          <button className="admin-btn admin-btn-secondary" onClick={() => navigate('/admin')}>
-            ← Annuler et Retourner
-          </button>
-        </header>
+      <div className="editor-main">
+        {error && (
+          <div style={{ background: '#FEF2F2', color: '#DC2626', padding: '16px', borderRadius: '12px', marginBottom: '24px', fontWeight: '500', border: '1px solid #FECACA' }}>
+            ⚠️ {error}
+          </div>
+        )}
 
-        <main className="admin-content-area">
-          {error && (
-            <div style={{ background: '#fef2f2', color: '#dc2626', padding: '15px', borderRadius: '10px', marginBottom: '20px', fontWeight: '600' }}>
-              ⚠️ {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSave} className="admin-card">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-              <div>
-                <label className="admin-label">Slug (URL ID)</label>
-                <input 
-                  type="text" 
-                  name="id" 
-                  className="admin-input" 
-                  value={formData.id} 
-                  onChange={handleChange} 
-                  disabled={!isNew}
-                  required 
-                  placeholder="ex: qui-sommes-nous"
-                />
-              </div>
-              <div>
-                <label className="admin-label">Type de Contenu</label>
-                <select name="type" className="admin-input" value={formData.type} onChange={handleChange}>
-                  <option value="page">Page Principale</option>
-                  <option value="actualite">Actualité / Communiqué</option>
-                  <option value="evenement">Événement Agenda</option>
-                </select>
-              </div>
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label className="admin-label">Titre Principal</label>
+        <form onSubmit={handleSave} className="editor-panel">
+          <div className="editor-meta-grid">
+            <div className="editor-meta-group">
+              <label>Slug (URL ID)</label>
               <input 
                 type="text" 
-                name="title" 
-                className="admin-input" 
-                style={{ fontSize: '18px', fontWeight: 'bold' }}
-                value={formData.title} 
+                name="id" 
+                value={formData.id} 
                 onChange={handleChange} 
+                disabled={!isNew}
                 required 
-                placeholder="Saisissez le titre de la page..."
+                placeholder="ex: qui-sommes-nous"
               />
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-              <div>
-                <label className="admin-label">Sur-titre (Kicker / Catégorie)</label>
-                <input 
-                  type="text" 
-                  name="kicker" 
-                  className="admin-input" 
-                  value={formData.kicker || ''} 
-                  onChange={handleChange} 
-                  placeholder="ex: Le GST Souss-Massa"
-                />
-              </div>
-              <div>
-                <label className="admin-label">Image de couverture (URL ou chemin)</label>
-                <input 
-                  type="text" 
-                  name="image" 
-                  className="admin-input" 
-                  value={formData.image || ''} 
-                  onChange={handleChange} 
-                  placeholder="ex: /hospital.png ou https://..."
-                />
-              </div>
+            <div className="editor-meta-group">
+              <label>Type de Contenu</label>
+              <select name="type" value={formData.type} onChange={handleChange}>
+                <option value="page">Page Principale</option>
+                <option value="actualite">Actualité / Communiqué</option>
+                <option value="evenement">Événement Agenda</option>
+              </select>
             </div>
+            <div className="editor-meta-group">
+              <label>Sur-titre (Catégorie)</label>
+              <input 
+                type="text" 
+                name="kicker" 
+                value={formData.kicker || ''} 
+                onChange={handleChange} 
+                placeholder="ex: Le GST Souss-Massa"
+              />
+            </div>
+            <div className="editor-meta-group">
+              <label>Image de couverture (URL)</label>
+              <input 
+                type="text" 
+                name="image" 
+                value={formData.image || ''} 
+                onChange={handleChange} 
+                placeholder="ex: /hospital.png"
+              />
+            </div>
+          </div>
 
-            <div style={{ marginBottom: '20px' }}>
-              <label className="admin-label">Résumé (Excerpt)</label>
+          <div style={{ padding: '32px' }}>
+            <input 
+              type="text" 
+              name="title" 
+              className="editor-title-input" 
+              value={formData.title} 
+              onChange={handleChange} 
+              required 
+              placeholder="Saisissez le titre de la page..."
+            />
+
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>Résumé (Excerpt)</label>
               <textarea 
                 name="excerpt" 
-                className="admin-input" 
-                style={{ minHeight: '80px', resize: 'vertical' }}
+                style={{ width: '100%', minHeight: '80px', padding: '12px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
                 value={formData.excerpt || ''} 
                 onChange={handleChange} 
-                placeholder="Brève description..."
+                placeholder="Brève description pour les listes..."
               />
             </div>
 
-            <div style={{ marginBottom: '40px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <label className="admin-label" style={{ marginBottom: 0 }}>Corps du Contenu HTML</label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', color: '#475569' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={isHtmlMode}
-                    onChange={(e) => setIsHtmlMode(e.target.checked)}
-                    style={{ width: '16px', height: '16px' }}
-                  />
-                  Mode Code HTML Avancé (Conserve la mise en page originale)
-                </label>
-              </div>
-              
-              <div style={{ background: 'white' }}>
-                {isHtmlMode ? (
-                  <textarea 
-                    className="admin-input"
-                    style={{ 
-                      minHeight: '420px', 
-                      fontFamily: 'monospace', 
-                      fontSize: '13px', 
-                      lineHeight: '1.5',
-                      padding: '15px',
-                      backgroundColor: '#1e293b',
-                      color: '#e2e8f0',
-                      resize: 'vertical'
-                    }}
-                    value={formData.content || ''}
-                    onChange={handleTextareaChange}
-                    placeholder="<!-- Collez ou éditez le code HTML ici -->"
-                  />
-                ) : (
-                  <ReactQuill 
-                    theme="snow" 
-                    value={formData.content || ''} 
-                    onChange={handleContentChange} 
-                    style={{ height: '350px', marginBottom: '50px' }}
-                    modules={{
-                      toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                        [{'list': 'ordered'}, {'list': 'bullet'}],
-                        ['link', 'image', 'video'],
-                        ['clean']
-                      ],
-                    }}
-                  />
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748b' }}>Contenu Principal</label>
+                {formData.type === 'page' && (
+                  <button 
+                    type="button" 
+                    className="admin-btn admin-btn-secondary" 
+                    onClick={() => setIsHtmlMode(!isHtmlMode)}
+                    style={{ padding: '6px 12px', fontSize: '12px' }}
+                  >
+                    {isHtmlMode ? 'Passer à l\'Éditeur Visuel (TinyMCE)' : 'Passer à l\'Éditeur Code (HTML)'}
+                  </button>
                 )}
               </div>
+              
+              {isHtmlMode ? (
+                <textarea 
+                  value={formData.content || ''} 
+                  onChange={handleTextareaChange}
+                  style={{ width: '100%', height: '500px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', border: '1px solid #E2E8F0', borderRadius: '8px', backgroundColor: '#1E293B', color: '#F8FAFC', boxSizing: 'border-box' }}
+                  placeholder="<h2>Votre code HTML ici...</h2>"
+                />
+              ) : (
+                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
+                  <WysiwygEditor 
+                    id={`editor-${id || 'new'}`}
+                    value={formData.content || ''} 
+                    onChange={handleContentChange} 
+                  />
+                </div>
+              )}
             </div>
 
-            <div style={{ display: 'flex', gap: '15px', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-              <button type="submit" className="admin-btn admin-btn-primary" disabled={saving}>
-                {saving ? 'Enregistrement...' : '💾 Publier / Enregistrer'}
-              </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', paddingTop: '24px', borderTop: '1px solid #E2E8F0' }}>
               <button type="button" className="admin-btn admin-btn-secondary" onClick={() => navigate('/admin')}>
                 Annuler
               </button>
+              <button type="submit" className="admin-btn admin-btn-primary" disabled={saving}>
+                {saving ? 'Enregistrement...' : 'Enregistrer le Contenu'}
+              </button>
             </div>
-          </form>
-        </main>
+          </div>
+        </form>
       </div>
     </div>
   );
