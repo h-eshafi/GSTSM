@@ -38,9 +38,13 @@ export default function GenericPage({ explicitSlug }: { explicitSlug?: string })
     return <div style={{ padding: '100px', textAlign: 'center' }}>Page introuvable.</div>;
   }
 
-  const processedContent = pageData.content
-    .replace(/src="\//g, `src="${import.meta.env.BASE_URL}`)
-    .replace(/href="\//g, `href="${import.meta.env.BASE_URL}`);
+  // Ensure trailing slash on BASE_URL is handled without resulting in double slashes (e.g. src="//assets...")
+  const rawBase = import.meta.env.BASE_URL || '/';
+  const cleanBase = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+
+  const processedContent = (pageData.content || '')
+    .replace(/src="\//g, `src="${cleanBase}/`)
+    .replace(/href="\//g, `href="${cleanBase}/`);
 
   return (
     <main>
