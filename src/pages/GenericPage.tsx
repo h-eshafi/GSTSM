@@ -38,9 +38,13 @@ export default function GenericPage({ explicitSlug }: { explicitSlug?: string })
     return <div style={{ padding: '100px', textAlign: 'center' }}>Page introuvable.</div>;
   }
 
+  const processedContent = pageData.content
+    .replace(/src="\//g, `src="${import.meta.env.BASE_URL}`)
+    .replace(/href="\//g, `href="${import.meta.env.BASE_URL}`);
+
   return (
     <main>
-      <div dangerouslySetInnerHTML={{ __html: pageData.content }} />
+      <div dangerouslySetInnerHTML={{ __html: processedContent }} />
       <div style={{ marginTop: '30px', paddingBottom: '40px', display: 'flex', justifyContent: 'center' }}>
         <Link to="/"><button className="content-back">← Retour à l’accueil</button></Link>
       </div>
