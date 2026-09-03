@@ -28,7 +28,7 @@ const categoryTitles: Record<string, string> = {
 };
 
 export default function AdminMenus() {
-  const [activeCategory, setActiveCategory] = useState<string>('gst');
+  const [activeCategory, setActiveCategory] = useState<string>('sante'); // default or selectable
   const [menus, setMenus] = useState<Record<string, any>>(getMenuData());
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number>(0);
   const [allPages, setAllPages] = useState<Post[]>([]);
@@ -43,8 +43,23 @@ export default function AdminMenus() {
     fetchPages();
   }, []);
 
-  const currentCatData = menus[activeCategory] || {};
-  const currentColumns = currentCatData.columns || [];
+
+  // Extract columns regardless of whether the category uses 'columns' or 'previewGroups'
+  const getCategoryColumns = (catKey: string) => {
+    const data = menus[catKey] || {};
+    if (data.columns && data.columns.length > 0) {
+      return data.columns;
+    }
+    if (data.previewGroups && data.previewGroups.length > 0) {
+      return data.previewGroups.map((group: any) => ({
+        title: group.title,
+        links: group.links || [{ label: group.title, href: group.href }]
+      }));
+    }
+    return [];
+  };
+
+  const currentColumns = getCategoryColumns(activeCategory);
 
   // Filtered pages for picker (max 5)
   const filteredPages = allPages
@@ -58,25 +73,46 @@ export default function AdminMenus() {
   };
 
   const handleAddPageToColumn = (page: Post) => {
-    if (!currentColumns[selectedColumnIndex]) return;
-
     const updated = JSON.parse(JSON.stringify(menus));
+    const cat = updated[activeCategory];
     const targetHref = `/pages/${page.id}`;
-    
-    // Check duplicate
-    const existing = updated[activeCategory].columns[selectedColumnIndex].links.find((l: any) => l.href === targetHref);
-    if (!existing) {
-      updated[activeCategory].columns[selectedColumnIndex].links.push({
-        label: page.title,
-        href: targetHref
-      });
-      setMenus(updated);
+
+    if (cat.columns && cat.columns[selectedColumnIndex]) {
+      const existing = cat.columns[selectedColumnIndex].links.find((l: any) => l.href === targetHref);
+      if (!existing) {
+        cat.columns[selectedColumnIndex].links.push({
+          label: page.title,
+          href: targetHref
+        });
+      }
+    } else if (cat.previewGroups && cat.previewGroups[selectedColumnIndex]) {
+      if (!cat.previewGroups[selectedColumnIndex].links) {
+        cat.previewGroups[selectedColumnIndex].links = [
+          { label: cat.previewGroups[selectedColumnIndex].title, href: cat.previewGroups[selectedColumnIndex].href }
+        ];
+      }
+      const existing = cat.previewGroups[selectedColumnIndex].links.find((l: any) => l.href === targetHref);
+      if (!existing) {
+        cat.previewGroups[selectedColumnIndex].links.push({
+          label: page.title,
+          href: targetHref
+        });
+      }
     }
+
+    setMenus(updated);
   };
 
   const handleRemoveLink = (colIndex: number, linkIndex: number) => {
     const updated = JSON.parse(JSON.stringify(menus));
-    updated[activeCategory].columns[colIndex].links.splice(linkIndex, 1);
+    const cat = updated[activeCategory];
+
+    if (cat.columns && cat.columns[colIndex]) {
+      cat.columns[colIndex].links.splice(linkIndex, 1);
+    } else if (cat.previewGroups && cat.previewGroups[colIndex] && cat.previewGroups[colIndex].links) {
+      cat.previewGroups[colIndex].links.splice(linkIndex, 1);
+    }
+
     setMenus(updated);
   };
 
@@ -125,7 +161,7 @@ export default function AdminMenus() {
         )}
 
         <div className="admin-card" style={{ display: 'flex', minHeight: '600px' }}>
-          {/* Category Tabs Sidebar - Left Aligned with Icons */}
+          {/* Category Tabs Sidebar */}
           <div style={{ width: '270px', borderRight: '1px solid var(--admin-border)', padding: '24px 16px', backgroundColor: '#FAFAF9' }}>
             <h4 style={{ margin: '0 0 16px 12px', fontSize: '11px', textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.05em', fontWeight: '700' }}>
               Rubriques Navbar
@@ -193,7 +229,6 @@ export default function AdminMenus() {
                         <span>{currentColumns[selectedColumnIndex].title}</span>
                       </h3>
 
-                      {/* Same Rectangle Card Styling for Submenu Links */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {currentColumns[selectedColumnIndex].links.length === 0 ? (
                           <div style={{ padding: '24px', textAlign: 'center', color: '#94A3B8', fontSize: '13px', background: '#F8FAFC', borderRadius: '8px', border: '1px dashed #CBD5E1' }}>
@@ -226,7 +261,7 @@ export default function AdminMenus() {
                   )}
                 </div>
 
-                {/* Right: Searchable Page Picker (5 Max + Live Search Bar) - Identical Card Style */}
+                {/* Right: Searchable Page Picker */}
                 <div style={{ background: '#FAFAF9', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px', height: 'fit-content' }}>
                   <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '700', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>➕</span>
@@ -236,7 +271,6 @@ export default function AdminMenus() {
                     Recherchez parmi vos pages publiées pour l'ajouter au sous-menu sélectionné.
                   </p>
 
-                  {/* Search Bar Input */}
                   <div style={{ marginBottom: '14px' }}>
                     <input 
                       type="text" 
@@ -248,7 +282,6 @@ export default function AdminMenus() {
                     />
                   </div>
 
-                  {/* Results List (Showing 5 Max) - Identical Rectangle Card Style */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {filteredPages.length === 0 ? (
                       <div style={{ fontSize: '12px', color: '#94A3B8', textAlign: 'center', padding: '16px' }}>
@@ -281,7 +314,7 @@ export default function AdminMenus() {
               </div>
             ) : (
               <div style={{ padding: '40px', textAlign: 'center', color: '#64748B', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                Rubrique prévisualisation directe. Les sous-pages sont gérées depuis la section Pages Principales.
+                Aucun sous-menu configuré pour cette rubrique.
               </div>
             )}
           </div>
