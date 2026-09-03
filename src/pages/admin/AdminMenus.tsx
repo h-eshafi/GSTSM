@@ -9,13 +9,22 @@ interface Post {
   type: string;
 }
 
+const categoryIcons: Record<string, string> = {
+  gst: '🏛️',
+  patients: '👥',
+  offre: '🏥',
+  sante: '🩺',
+  espace: '💼',
+  actu: '📰'
+};
+
 const categoryTitles: Record<string, string> = {
-  gst: '1. Le GST Souss-Massa',
-  patients: '2. Patients et Proches',
-  offre: '3. Offre de Soins',
-  sante: '4. Santé Publique',
-  espace: '5. Espace Professionnel',
-  actu: '6. Actualités et Médias'
+  gst: 'Le GST Souss-Massa',
+  patients: 'Patients et Proches',
+  offre: 'Offre de Soins',
+  sante: 'Santé Publique',
+  espace: 'Espace Professionnel',
+  actu: 'Actualités et Médias'
 };
 
 export default function AdminMenus() {
@@ -95,7 +104,7 @@ export default function AdminMenus() {
         <div className="pages-header-section" style={{ marginBottom: '24px' }}>
           <div className="pages-header-title">
             <h1>🗺️ Gestionnaire de Menus Navbar</h1>
-            <p>Gérez les sous-menus déroulants, ajoutez vos pages existantes et enregistrez la structure du menu public.</p>
+            <p>Organisez la structure des sous-menus et les liens par rubrique.</p>
           </div>
 
           <div className="pages-filter-actions">
@@ -116,10 +125,10 @@ export default function AdminMenus() {
         )}
 
         <div className="admin-card" style={{ display: 'flex', minHeight: '600px' }}>
-          {/* Category Tabs Sidebar */}
-          <div style={{ width: '260px', borderRight: '1px solid var(--admin-border)', padding: '24px 16px', backgroundColor: '#FAFAF9' }}>
+          {/* Category Tabs Sidebar - Left Aligned with Icons */}
+          <div style={{ width: '270px', borderRight: '1px solid var(--admin-border)', padding: '24px 16px', backgroundColor: '#FAFAF9' }}>
             <h4 style={{ margin: '0 0 16px 12px', fontSize: '11px', textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.05em', fontWeight: '700' }}>
-              Rubriques Navbar Principales
+              Rubriques Navbar
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {Object.entries(categoryTitles).map(([key, label]) => (
@@ -130,9 +139,10 @@ export default function AdminMenus() {
                     setActiveCategory(key);
                     setSelectedColumnIndex(0);
                   }}
+                  style={{ textAlign: 'left', width: '100%', justifyContent: 'flex-start' }}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: '600' }}>{label}</span>
-                  <span>📌</span>
+                  <span style={{ fontSize: '16px' }}>{categoryIcons[key]}</span>
+                  <span style={{ fontSize: '13.5px', fontWeight: activeCategory === key ? '600' : '500' }}>{label}</span>
                 </button>
               ))}
             </div>
@@ -142,8 +152,9 @@ export default function AdminMenus() {
           <div style={{ flex: 1, padding: '32px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #E2E8F0', paddingBottom: '16px' }}>
               <div>
-                <h2 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px 0' }}>
-                  {categoryTitles[activeCategory]}
+                <h2 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>{categoryIcons[activeCategory]}</span>
+                  <span>{categoryTitles[activeCategory]}</span>
                 </h2>
                 <p style={{ margin: 0, fontSize: '13px', color: '#64748B' }}>
                   Sélectionnez un sous-menu déroulant pour organiser ses liens.
@@ -177,21 +188,22 @@ export default function AdminMenus() {
                   {/* Active Submenu Container */}
                   {currentColumns[selectedColumnIndex] && (
                     <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                      <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0F172A', marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span>📂</span>
                         <span>{currentColumns[selectedColumnIndex].title}</span>
                       </h3>
 
+                      {/* Same Rectangle Card Styling for Submenu Links */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {currentColumns[selectedColumnIndex].links.length === 0 ? (
-                          <div style={{ padding: '24px', textAlign: 'center', color: '#94A3B8', fontSize: '12px', background: '#F8FAFC', borderRadius: '8px', border: '1px dashed #CBD5E1' }}>
-                            Aucun lien dans ce sous-menu. Utilisez le sélecteur de pages à droite pour en ajouter.
+                          <div style={{ padding: '24px', textAlign: 'center', color: '#94A3B8', fontSize: '13px', background: '#F8FAFC', borderRadius: '8px', border: '1px dashed #CBD5E1' }}>
+                            Aucun lien dans ce sous-menu. Utilisez le sélecteur à droite pour en ajouter.
                           </div>
                         ) : (
                           currentColumns[selectedColumnIndex].links.map((link: any, linkIdx: number) => (
                             <div 
                               key={linkIdx} 
-                              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' }}
+                              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' }}
                             >
                               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: '8px' }}>
                                 <div style={{ fontWeight: '600', color: '#0F172A', fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{link.label}</div>
@@ -200,9 +212,9 @@ export default function AdminMenus() {
                               <button 
                                 type="button"
                                 className="admin-btn admin-btn-danger" 
-                                style={{ padding: '4px 8px', fontSize: '11px', flexShrink: 0 }}
+                                style={{ padding: '5px 8px', fontSize: '12px', flexShrink: 0 }}
                                 onClick={() => handleRemoveLink(selectedColumnIndex, linkIdx)}
-                                title="Supprimer"
+                                title="Supprimer du menu"
                               >
                                 🗑️
                               </button>
@@ -214,7 +226,7 @@ export default function AdminMenus() {
                   )}
                 </div>
 
-                {/* Right: Searchable Page Picker (5 Max + Live Search Bar) */}
+                {/* Right: Searchable Page Picker (5 Max + Live Search Bar) - Identical Card Style */}
                 <div style={{ background: '#FAFAF9', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '20px', height: 'fit-content' }}>
                   <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '700', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>➕</span>
@@ -236,7 +248,7 @@ export default function AdminMenus() {
                     />
                   </div>
 
-                  {/* Results List (Showing 5 Max - Same Rectangle Size & Style) */}
+                  {/* Results List (Showing 5 Max) - Identical Rectangle Card Style */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {filteredPages.length === 0 ? (
                       <div style={{ fontSize: '12px', color: '#94A3B8', textAlign: 'center', padding: '16px' }}>
@@ -246,7 +258,7 @@ export default function AdminMenus() {
                       filteredPages.map((page) => (
                         <div 
                           key={page.id}
-                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' }}
+                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' }}
                         >
                           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: '8px' }}>
                             <div style={{ fontWeight: '600', color: '#0F172A', fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{page.title}</div>
