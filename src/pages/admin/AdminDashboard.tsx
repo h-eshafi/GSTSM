@@ -8,34 +8,35 @@ interface Post {
   type: string;
   title: string;
   kicker: string;
+  image?: string;
   createdAt: string;
 }
 
 const megaMenuData: Record<string, any> = megaMenuDataRaw;
 
 const categoryNames: Record<string, string> = {
+  all: 'Toutes les rubriques',
   gst: 'Le GST Souss-Massa',
   patients: 'Patients et Proches',
   offre: 'Offre de Soins',
   sante: 'Santé Publique',
   espace: 'Espace Professionnel',
   actu: 'Actualités et Médias',
-  autres: 'Autres Pages (Non classées)'
+  general: 'Pages Générales'
 };
 
 export default function AdminDashboard() {
   const [searchParams] = useSearchParams();
-  const defaultTab = searchParams.get('tab') || 'overview';
+  const activeTab = searchParams.get('tab') || 'overview';
   
-  const [activeTab, setActiveTab] = useState(defaultTab);
   const [posts, setPosts] = useState<Post[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRubrique, setSelectedRubrique] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select('id, type, title, kicker, createdAt').order('createdAt', { ascending: false });
+      const { data, error } = await supabase.from('posts').select('id, type, title, kicker, image, createdAt').order('createdAt', { ascending: false });
       if (data) setPosts(data);
       if (error) console.error('Error fetching posts:', error);
       setLoading(false);
@@ -55,222 +56,274 @@ export default function AdminDashboard() {
   const newsCount = posts.filter(p => p.type === 'actualite').length;
   const eventCount = posts.filter(p => p.type === 'evenement').length;
 
-  // Filter for Search
-  const searchFilter = (post: Post) => {
-    if (!searchTerm) return true;
-    return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-           post.id.toLowerCase().includes(searchTerm.toLowerCase());
-  };
-
-  // Group pages by Menu Categories
-  const getCategorizedPages = () => {
-    const categorized: Record<string, Post[]> = {
-      gst: [], patients: [], offre: [], sante: [], espace: [], actu: [], autres: []
-    };
-
-    // Extract all known slugs from menus.json
-    const knownSlugs = new Map<string, string>(); // slug -> category
+  // Known slugs map for categories
+  const getKnownCategory = (slug: string): string => {
+    let matchedCat = 'general';
     Object.entries(megaMenuData).forEach(([catKey, catData]) => {
       if (catData.columns) {
         catData.columns.forEach((col: any) => {
           col.links.forEach((link: any) => {
-            const slug = link.href.split('/').pop().replace('.html', '');
-            knownSlugs.set(slug, catKey);
+            const s = link.href.split('/').pop().replace('.html', '');
+            if (s === slug) matchedCat = catKey;
           });
         });
       }
       if (catData.previewGroups) {
         catData.previewGroups.forEach((group: any) => {
-          const slug = group.href.split('/').pop().replace('.html', '');
-          knownSlugs.set(slug, catKey);
+          const s = group.href.split('/').pop().replace('.html', '');
+          if (s === slug) matchedCat = catKey;
         });
       }
     });
-
-    // Group the pages
-    posts.filter(p => p.type === 'page').filter(searchFilter).forEach(post => {
-      const cat = knownSlugs.get(post.id);
-      if (cat && categorized[cat]) {
-        categorized[cat].push(post);
-      } else {
-        categorized.autres.push(post);
-      }
-    });
-
-    return categorized;
+    return matchedCat;
   };
 
+  // Filter for Search & Category
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = !searchTerm || 
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      post.id.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (activeTab === 'general') {
+      const cat = getKnownCategory(post.id);
+      return post.type === 'page' && cat === 'general';
+    }
+
+    if (activeTab === 'pages') {
+      if (post.type !== 'page') return false;
+      if (selectedRubrique === 'all') return true;
+      const cat = getKnownCategory(post.id);
+      return cat === selectedRubrique;
+    }
+
+    if (activeTab === 'actualites') return post.type === 'actualite';
+    if (activeTab === 'evenements') return post.type === 'evenement';
+
+    return true;
+  });
+
   const renderTableRows = (items: Post[]) => {
-    if (items.length === 0) return <tr><td colSpan={4} style={{ textAlign: 'center', padding: '30px' }}>Aucun élément trouvé.</td></tr>;
-    return items.map((post) => (
-      <tr key={post.id}>
-        <td>
-          <div style={{ fontWeight: '600', color: '#0f172a', fontSize: '15px' }}>{post.title}</div>
-          <div style={{ fontSize: '13px', color: '#64748b', marginTop: '3px' }}>
-            URL: /pages/{post.id}
-          </div>
-        </td>
-        <td>
-          <span className={`type-badge badge-${post.type}`}>
-            {post.kicker || post.type}
-          </span>
-        </td>
-        <td style={{ color: '#64748b', fontSize: '13px' }}>
-          {new Date(post.createdAt).toLocaleDateString('fr-FR')}
-        </td>
-        <td style={{ textAlign: 'right' }}>
-          <Link to={`/admin/edit/${post.id}`}>
-            <button className="admin-btn admin-btn-secondary" style={{ padding: '6px 12px', fontSize: '13px', marginRight: '8px' }}>
-              ✏️ Éditer
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: '#64748B' }}>
+            Chargement des contenus Supabase...
+          </td>
+        </tr>
+      );
+    }
+
+    if (items.length === 0) {
+      return (
+        <tr>
+          <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: '#64748B' }}>
+            Aucune page trouvée dans cette rubrique.
+          </td>
+        </tr>
+      );
+    }
+
+    return items.map((post) => {
+      const catKey = getKnownCategory(post.id);
+      const catLabel = categoryNames[catKey] || 'Page Générale';
+      const pageImg = post.image || '/gst-scene-2.png';
+
+      return (
+        <tr key={post.id}>
+          <td style={{ width: '40px' }}>
+            <input type="checkbox" style={{ borderRadius: '4px', cursor: 'pointer' }} />
+          </td>
+          <td>
+            <div className="page-thumb-cell">
+              <div className="page-thumb">
+                <img src={pageImg} alt={post.title} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                <span>📄</span>
+              </div>
+              <div>
+                <div style={{ fontWeight: '600', color: '#0F172A', fontSize: '14px' }}>{post.title}</div>
+                <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                  URL: /pages/{post.id} • {new Date(post.createdAt).toLocaleDateString('fr-FR')}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span className="rubrique-badge">
+              <span>📌</span>
+              <span>{catLabel}</span>
+            </span>
+          </td>
+          <td>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#10B981' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }}></span>
+              En ligne ✓
+            </span>
+          </td>
+          <td style={{ textAlign: 'right' }}>
+            <Link to={`/admin/edit/${post.id}`}>
+              <button className="admin-btn admin-btn-secondary">
+                ✏️ Éditer
+              </button>
+            </Link>
+            <button 
+              className="admin-btn admin-btn-danger" 
+              style={{ marginLeft: '8px' }}
+              onClick={() => handleDelete(post.id)}
+            >
+              🗑️ Supprimer
             </button>
-          </Link>
-          <button 
-            className="admin-btn admin-btn-danger" 
-            style={{ padding: '6px 12px', fontSize: '13px' }}
-            onClick={() => handleDelete(post.id)}
-          >
-            🗑️ Supprimer
-          </button>
-        </td>
-      </tr>
-    ));
+          </td>
+        </tr>
+      );
+    });
   };
 
   return (
-    <>
-      <div className="admin-main-container">
-        <header className="admin-topbar">
-          <h1 className="admin-topbar-title">
-            {activeTab === 'overview' && '📊 Tableau de Bord Overview'}
-            {activeTab === 'pages' && '📄 Pages & Sections du Site'}
-            {activeTab === 'actualites' && '📰 Actualités & Communiqués'}
-            {activeTab === 'evenements' && '📅 Événements & Agenda Régional'}
-          </h1>
-          <div className="admin-user-pill">
-            <span className="admin-user-dot"></span>
-            <span>Administrateur Connecté</span>
-          </div>
-        </header>
+    <div className="admin-main-container">
+      {/* Storeep Topbar Header */}
+      <header className="admin-topbar">
+        <div className="admin-search-wrapper">
+          <span className="admin-search-icon">🔍</span>
+          <input 
+            type="text" 
+            className="admin-topbar-search" 
+            placeholder="Rechercher une page, un article, un slug..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <span className="admin-search-kbd">Ctrl K</span>
+        </div>
 
-        <main className="admin-content">
-          {/* KPI Metrics Summary Row */}
-          {activeTab === 'overview' && (
+        <div className="admin-topbar-actions">
+          <button className="admin-icon-btn" title="Mode Sombre">🌙</button>
+          <button className="admin-icon-btn" title="Marketplace">🔲</button>
+          <button className="admin-icon-btn" title="Notifications">🔔</button>
+          <div className="admin-avatar-btn" title="Profil Administrateur">AD</div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="admin-content">
+        {/* OVERVIEW TAB */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Storeep Gradient Banner */}
+            <div className="storeep-banner">
+              <span className="storeep-banner-badge">SPRING 2026 • GST SOUSS-MASSA</span>
+              <h2>GST Souss-Massa administration centralisée</h2>
+              <p>
+                Gérez l'ensemble des rubriques du portail régional de santé, administrez les contenus
+                et mettez à jour les publications en toute simplicité.
+              </p>
+              <Link to="/" className="storeep-banner-btn">
+                <span>Voir le site public</span>
+                <span>→</span>
+              </Link>
+            </div>
+
+            {/* KPI Cards Row */}
             <div className="admin-kpi-grid">
-              <div className="admin-kpi-card" onClick={() => setActiveTab('pages')} style={{ cursor: 'pointer' }}>
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-icon-pill">👁️</div>
                 <div className="admin-kpi-info">
-                  <h4>Pages Principales</h4>
+                  <h4>Visiteurs ce mois-ci</h4>
+                  <p>12 450</p>
+                </div>
+              </div>
+
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-icon-pill">📄</div>
+                <div className="admin-kpi-info">
+                  <h4>Pages Publiées</h4>
                   <p>{pageCount}</p>
                 </div>
-                <div className="admin-kpi-icon kpi-purple">📄</div>
               </div>
 
-              <div className="admin-kpi-card" onClick={() => setActiveTab('actualites')} style={{ cursor: 'pointer' }}>
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-icon-pill">📰</div>
                 <div className="admin-kpi-info">
-                  <h4>Actualités</h4>
-                  <p>{newsCount}</p>
+                  <h4>Articles & Événements</h4>
+                  <p>{newsCount + eventCount}</p>
                 </div>
-                <div className="admin-kpi-icon kpi-blue">📰</div>
-              </div>
-
-              <div className="admin-kpi-card" onClick={() => setActiveTab('evenements')} style={{ cursor: 'pointer' }}>
-                <div className="admin-kpi-info">
-                  <h4>Événements</h4>
-                  <p>{eventCount}</p>
-                </div>
-                <div className="admin-kpi-icon kpi-pink">📅</div>
               </div>
             </div>
-          )}
 
-          {/* PAGES TAB - CATEGORIZED INTO 6 SECTIONS */}
-          {activeTab === 'pages' && (
+            {/* Recent Pages Table */}
             <div className="admin-card">
               <div className="admin-card-header">
-                <h3>Architecture du Site (50+ Pages)</h3>
-                <Link to="/admin/new" className="admin-btn admin-btn-primary" style={{ textDecoration: 'none' }}>
-                  + Créer une page
+                <h3>Derniers Contenus Mis à Jour</h3>
+                <Link to="/admin/new" className="admin-btn admin-btn-primary">
+                  + Nouvelle Page
                 </Link>
               </div>
 
-              <div className="admin-search-bar">
-                <input 
-                  type="text" 
-                  className="admin-input" 
-                  placeholder="Rechercher par titre ou identifiant..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-
-              <div className="admin-table-wrapper" style={{ padding: '24px', backgroundColor: '#F8FAFC' }}>
-                {loading ? (
-                  <div style={{ textAlign: 'center', padding: '30px' }}>Chargement depuis Supabase...</div>
-                ) : (
-                  Object.entries(getCategorizedPages()).map(([catKey, catPages]) => {
-                    if (catPages.length === 0) return null;
-                    const isOpen = openAccordion === catKey;
-                    
-                    return (
-                      <div key={catKey} style={{ marginBottom: '16px', backgroundColor: 'white', border: '1px solid var(--admin-border)', borderRadius: '8px', overflow: 'hidden' }}>
-                        <button 
-                          onClick={() => setOpenAccordion(isOpen ? null : catKey)}
-                          style={{ width: '100%', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: isOpen ? '#F1F5F9' : 'white', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ fontSize: '18px' }}>📁</span>
-                            <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: 'var(--admin-text-main)' }}>
-                              {categoryNames[catKey] || 'Section'}
-                            </h4>
-                            <span style={{ backgroundColor: '#E2E8F0', padding: '2px 8px', borderRadius: '100px', fontSize: '12px', color: '#475569', fontWeight: '600' }}>
-                              {catPages.length}
-                            </span>
-                          </div>
-                          <span style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', fontSize: '12px', color: '#64748B' }}>▼</span>
-                        </button>
-                        
-                        {isOpen && (
-                          <div style={{ borderTop: '1px solid var(--admin-border)' }}>
-                            <table className="admin-table">
-                              <thead>
-                                <tr>
-                                  <th>Titre & URL Slug</th>
-                                  <th>Catégorie (Sur-titre)</th>
-                                  <th>Date</th>
-                                  <th style={{ textAlign: 'right' }}>Actions</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {renderTableRows(catPages)}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })
-                )}
+              <div className="admin-table-wrapper">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '40px' }}></th>
+                      <th>Page / Titre</th>
+                      <th>Rubrique</th>
+                      <th>Statut</th>
+                      <th style={{ textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {renderTableRows(posts.slice(0, 8))}
+                  </tbody>
+                </table>
               </div>
             </div>
-          )}
+          </>
+        )}
 
-          {/* ACTUALITES & EVENEMENTS TABS */}
-          {(activeTab === 'actualites' || activeTab === 'evenements') && (
+        {/* PAGES VIEW (Storeep Style Dropdown Select & Table) */}
+        {(activeTab === 'pages' || activeTab === 'general') && (
+          <>
+            <div className="pages-header-section">
+              <div className="pages-header-title">
+                <h1>{activeTab === 'general' ? 'Pages Générales' : 'Pages Principales'}</h1>
+                <p>Vos pages, vos règles. Filtrez par rubrique navigation, éditez et gérez.</p>
+              </div>
+
+              <div className="pages-filter-actions">
+                {activeTab === 'pages' && (
+                  <div className="storeep-dropdown-btn">
+                    <span>Filter:</span>
+                    <select 
+                      className="storeep-dropdown-select"
+                      value={selectedRubrique}
+                      onChange={(e) => setSelectedRubrique(e.target.value)}
+                    >
+                      {Object.entries(categoryNames).map(([key, label]) => (
+                        <option key={key} value={key}>{label}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <Link to="/admin/new" className="storeep-secondary-btn" style={{ textDecoration: 'none' }}>
+                  <span>+ Créer une page</span>
+                </Link>
+              </div>
+            </div>
+
             <div className="admin-card">
               <div className="admin-card-header">
                 <h3>
-                  {activeTab === 'actualites' && 'Articles & Actualités'}
-                  {activeTab === 'evenements' && 'Événements de l\'Agenda'}
+                  <span>📦</span>
+                  <span>Liste des Pages ({filteredPosts.length})</span>
                 </h3>
-                <Link to="/admin/new" className="admin-btn admin-btn-primary" style={{ textDecoration: 'none' }}>
-                  + Créer un nouveau contenu
-                </Link>
+                <span style={{ fontSize: '18px', color: '#64748B', cursor: 'pointer' }}>⚙️</span>
               </div>
 
               <div className="admin-search-bar">
                 <input 
                   type="text" 
                   className="admin-input" 
-                  placeholder="Rechercher par titre ou identifiant..."
+                  placeholder="Rechercher une page par titre ou slug URL..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -280,26 +333,76 @@ export default function AdminDashboard() {
                 <table className="admin-table">
                   <thead>
                     <tr>
-                      <th>Titre & URL Slug</th>
-                      <th>Catégorie</th>
-                      <th>Date</th>
+                      <th style={{ width: '40px' }}></th>
+                      <th>Page</th>
+                      <th>Rubrique Nav Bar</th>
+                      <th>Statut</th>
                       <th style={{ textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {loading ? (
-                      <tr><td colSpan={4} style={{ textAlign: 'center', padding: '30px' }}>Chargement depuis Supabase...</td></tr>
-                    ) : (
-                      renderTableRows(posts.filter(p => p.type === activeTab).filter(searchFilter))
-                    )}
+                    {renderTableRows(filteredPosts)}
                   </tbody>
                 </table>
               </div>
             </div>
-          )}
+          </>
+        )}
 
-        </main>
-      </div>
-    </>
+        {/* ACTUALITES & EVENEMENTS VIEWS */}
+        {(activeTab === 'actualites' || activeTab === 'evenements') && (
+          <>
+            <div className="pages-header-section">
+              <div className="pages-header-title">
+                <h1>{activeTab === 'actualites' ? 'Actualités & Médias' : 'Événements & Agenda'}</h1>
+                <p>Gérez les articles, communiqués de presse et l'agenda des événements régionaux.</p>
+              </div>
+
+              <div className="pages-filter-actions">
+                <Link to="/admin/new" className="storeep-dropdown-btn" style={{ textDecoration: 'none' }}>
+                  <span>+ Créer un contenu</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="admin-card">
+              <div className="admin-card-header">
+                <h3>
+                  <span>📰</span>
+                  <span>{activeTab === 'actualites' ? 'Articles d\'Actualités' : 'Événements'}</span>
+                </h3>
+              </div>
+
+              <div className="admin-search-bar">
+                <input 
+                  type="text" 
+                  className="admin-input" 
+                  placeholder="Rechercher par titre..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              <div className="admin-table-wrapper">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '40px' }}></th>
+                      <th>Titre & URL</th>
+                      <th>Catégorie</th>
+                      <th>Statut</th>
+                      <th style={{ textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {renderTableRows(filteredPosts)}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+      </main>
+    </div>
   );
 }

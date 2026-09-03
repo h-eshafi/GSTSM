@@ -5,11 +5,11 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
   return (
     <Editor
       id={id}
-      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.3.0/tinymce.min.js"
+      apiKey="4qv18891sfw90yuvulh2hk3dltsdjub7ccl1su102l7nkkqg"
       value={value}
       onEditorChange={(content) => onChange(content)}
       init={{
-        height: 500,
+        height: 520,
         menubar: true,
         plugins: [
           'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -21,7 +21,7 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
           'alignright alignjustify | bullist numlist outdent indent | ' +
           'removeformat | image media table | help',
         content_css: '/src/index.css',
-        content_style: 'body { font-family:Inter,Helvetica,Arial,sans-serif; font-size:16px; padding: 20px; }',
+        content_style: 'body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 16px; padding: 20px; background-color: #ffffff; }',
       }}
     />
   );

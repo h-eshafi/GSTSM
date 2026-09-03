@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import WysiwygEditor from '../../components/WysiwygEditor';
 import { supabase } from '../../lib/supabase';
 import '../../admin.css';
@@ -22,8 +22,6 @@ export default function AdminEditor() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [isHtmlMode, setIsHtmlMode] = useState(false);
-
-  // Removed forced HTML mode to default to TinyMCE visual editor
 
   useEffect(() => {
     if (!isNew && id) {
@@ -79,12 +77,31 @@ export default function AdminEditor() {
     }
   };
 
-  if (loading) return <div style={{ padding: '50px', textAlign: 'center' }}>Chargement de l'éditeur...</div>;
+  if (loading) return <div style={{ padding: '50px', textAlign: 'center', marginLeft: '260px' }}>Chargement de l'éditeur...</div>;
 
   return (
-    <>
-      {/* Main Content */}
-      <div className="editor-main">
+    <div className="admin-main-container">
+      {/* Topbar Header */}
+      <header className="admin-topbar">
+        <div className="admin-search-wrapper">
+          <span className="admin-search-icon">🔍</span>
+          <input 
+            type="text" 
+            className="admin-topbar-search" 
+            placeholder="Édition de contenu..." 
+            disabled
+          />
+        </div>
+
+        <div className="admin-topbar-actions">
+          <Link to="/admin" className="admin-btn admin-btn-secondary">
+            ← Annuler et Retourner
+          </Link>
+          <div className="admin-avatar-btn" title="Profil Administrateur">AD</div>
+        </div>
+      </header>
+
+      <main className="admin-content" style={{ maxWidth: '1100px' }}>
         {error && (
           <div style={{ background: '#FEF2F2', color: '#DC2626', padding: '16px', borderRadius: '12px', marginBottom: '24px', fontWeight: '500', border: '1px solid #FECACA' }}>
             ⚠️ {error}
@@ -114,7 +131,7 @@ export default function AdminEditor() {
               </select>
             </div>
             <div className="editor-meta-group">
-              <label>Sur-titre (Catégorie)</label>
+              <label>Sur-titre (Catégorie / Kicker)</label>
               <input 
                 type="text" 
                 name="kicker" 
@@ -130,7 +147,7 @@ export default function AdminEditor() {
                 name="image" 
                 value={formData.image || ''} 
                 onChange={handleChange} 
-                placeholder="ex: /hospital.png"
+                placeholder="ex: /gst-scene-2.png"
               />
             </div>
           </div>
@@ -147,29 +164,28 @@ export default function AdminEditor() {
             />
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>Résumé (Excerpt)</label>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748B', marginBottom: '8px', textTransform: 'uppercase' }}>Résumé (Excerpt)</label>
               <textarea 
                 name="excerpt" 
-                style={{ width: '100%', minHeight: '80px', padding: '12px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+                style={{ width: '100%', minHeight: '70px', padding: '12px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '13px', boxSizing: 'border-box' }}
                 value={formData.excerpt || ''} 
                 onChange={handleChange} 
-                placeholder="Brève description pour les listes..."
+                placeholder="Brève description pour le moteur de recherche..."
               />
             </div>
 
             <div style={{ marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748b' }}>Contenu Principal</label>
-                {formData.type === 'page' && (
-                  <button 
-                    type="button" 
-                    className="admin-btn admin-btn-secondary" 
-                    onClick={() => setIsHtmlMode(!isHtmlMode)}
-                    style={{ padding: '6px 12px', fontSize: '12px' }}
-                  >
-                    {isHtmlMode ? 'Passer à l\'Éditeur Visuel (TinyMCE)' : 'Passer à l\'Éditeur Code (HTML)'}
-                  </button>
-                )}
+                <label style={{ fontSize: '12px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Éditeur de Contenu TinyMCE</label>
+                
+                <button 
+                  type="button" 
+                  className="admin-btn admin-btn-secondary" 
+                  onClick={() => setIsHtmlMode(!isHtmlMode)}
+                  style={{ padding: '6px 12px', fontSize: '12px' }}
+                >
+                  {isHtmlMode ? 'Passer à l\'Éditeur Visuel (TinyMCE)' : 'Passer au Mode Code HTML'}
+                </button>
               </div>
               
               {isHtmlMode ? (
@@ -200,7 +216,7 @@ export default function AdminEditor() {
             </div>
           </div>
         </form>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
