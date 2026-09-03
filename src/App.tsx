@@ -10,12 +10,16 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminMenus from './pages/admin/AdminMenus';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminSidebar from './components/admin/AdminSidebar';
+import SideRail from './components/SideRail';
+import Chatbot from './components/Chatbot';
 
 function PublicLayout() {
   return (
     <div className="app">
       <Header />
+      <SideRail />
       <Outlet />
+      <Chatbot />
       <Footer />
     </div>
   );

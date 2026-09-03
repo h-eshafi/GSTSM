@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function SideRail() {
   return (
     <aside className="side-rail" aria-label="Accès rapides">
-      <Link to="/urgences" style={{textDecoration: 'none', display: 'contents'}}>
+      <Link to="/pages/urgences-et-aide-medicale-urgente" style={{textDecoration: 'none', display: 'contents'}}>
         <button className="samu" aria-label="Urgences et SAMU">
           <i>
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -16,7 +16,7 @@ export default function SideRail() {
           </span>
         </button>
       </Link>
-      <Link to="/rendez-vous" style={{textDecoration: 'none', display: 'contents'}}>
+      <Link to="/pages/prendre-rendez-vous" style={{textDecoration: 'none', display: 'contents'}}>
         <button className="rdv" aria-label="Prendre rendez-vous">
           <i>
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -30,7 +30,7 @@ export default function SideRail() {
           </span>
         </button>
       </Link>
-      <Link to="/centre-decoute" style={{textDecoration: 'none', display: 'contents'}}>
+      <Link to="/pages/centre-decoute" style={{textDecoration: 'none', display: 'contents'}}>
         <button className="ecoute" aria-label="Centre d’écoute">
           <i>
             <svg viewBox="0 0 24 24" aria-hidden="true">
