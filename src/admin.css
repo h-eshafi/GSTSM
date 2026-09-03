@@ -486,3 +486,11 @@ body {
   outline: none;
   border-color: var(--admin-primary);
 }
+
+/* Hide TinyMCE API Key Notification (Free Usage) */
+.tox-notifications-container {
+  display: none !important;
+}
+.tox-promotion {
+  display: none !important;
+}
