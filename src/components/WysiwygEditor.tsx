@@ -6,22 +6,29 @@ export default function WysiwygEditor({ value, onChange, id }: { value: string, 
     <Editor
       id={id}
       apiKey="4qv18891sfw90yuvulh2hk3dltsdjub7ccl1su102l7nkkqg"
+      tinymceScriptSrc="https://cdn.tiny.cloud/1/4qv18891sfw90yuvulh2hk3dltsdjub7ccl1su102l7nkkqg/tinymce/8/tinymce.min.js"
       value={value}
+      disabled={false}
       onEditorChange={(content) => onChange(content)}
       init={{
-        height: 520,
+        height: 550,
         menubar: true,
         plugins: [
-          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+          'accordion', 'advlist', 'anchor', 'autolink', 'autoresize', 'autosave',
+          'charmap', 'code', 'codesample', 'directionality', 'emoticons', 'fullscreen',
+          'help', 'image', 'importcss', 'insertdatetime', 'link', 'lists', 'media',
+          'nonbreaking', 'pagebreak', 'preview', 'quickbars', 'save', 'searchreplace',
+          'table', 'visualblocks', 'visualchars', 'wordcount'
         ],
-        toolbar: 'undo redo | blocks | ' +
-          'bold italic forecolor | alignleft aligncenter ' +
+        toolbar: 'undo redo | blocks fontfamily fontsize | ' +
+          'bold italic underline strikethrough forecolor backcolor | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | image media table | help',
+          'link image media table | code fullscreen preview | help',
         content_css: '/src/index.css',
-        content_style: 'body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 16px; padding: 20px; background-color: #ffffff; }',
+        content_style: 'body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 16px; padding: 20px; background-color: #ffffff; color: #0f172a; }',
+        branding: false,
+        promotion: false,
+        resize: true,
       }}
     />
   );
